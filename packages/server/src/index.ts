@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import projectsRouter, { getProject, getAllProjects, saveProject } from './api/projects.js';
 import { createProject, startDemoWorkflow, approvePlan, rejectPlan, editPlan, type DemoWorkflow } from './mock/generator.js';
+import { sessionManager } from './session.js';
 import type { ServerMessage, ClientMessage, Project } from './types.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -34,6 +35,34 @@ const activeWorkflows = new Map<string, DemoWorkflow>();
 // Track client subscriptions
 const clientSubscriptions = new Map<WebSocket, Set<string>>();
 
+// Set up session manager event handlers
+sessionManager.on('output', (data: string) => {
+  broadcast({ type: 'terminal:output', data });
+});
+
+sessionManager.on('started', () => {
+  const projectPath = sessionManager.projectPath;
+  if (projectPath) {
+    broadcast({ type: 'session:started', projectPath });
+  }
+});
+
+sessionManager.on('ended', (exitCode: number, reason: string) => {
+  broadcast({ type: 'session:ended', exitCode, reason });
+});
+
+sessionManager.on('error', (message: string) => {
+  broadcast({ type: 'session:error', message });
+});
+
+sessionManager.on('statusChange', () => {
+  broadcast({
+    type: 'session:status',
+    status: sessionManager.status,
+    projectPath: sessionManager.projectPath,
+  });
+});
+
 function broadcast(message: ServerMessage, projectId?: string): void {
   const data = JSON.stringify(message);
   wss.clients.forEach((client) => {
@@ -62,6 +91,13 @@ wss.on('connection', (ws) => {
 
   // Send initial project list
   sendToClient(ws, { type: 'project:list', projects: getAllProjects() });
+
+  // Send current session status
+  sendToClient(ws, {
+    type: 'session:status',
+    status: sessionManager.status,
+    projectPath: sessionManager.projectPath,
+  });
 
   ws.on('message', (data) => {
     try {
@@ -219,9 +255,31 @@ function handleClientMessage(ws: WebSocket, message: ClientMessage): void {
     }
 
     case 'terminal:input': {
-      // For V1, terminal input is simulated/read-only
-      // In V2, this would send to an actual Claude Code session
-      console.log('[terminal] Input received (ignored in V1):', message.data);
+      // Send input to the active Claude Code session
+      sessionManager.write(message.data);
+      break;
+    }
+
+    case 'terminal:resize': {
+      // Resize the PTY
+      sessionManager.resize(message.cols, message.rows);
+      break;
+    }
+
+    case 'session:start': {
+      // Start a new Claude Code session
+      sessionManager.startSession({
+        projectPath: message.projectPath,
+        skipPermissions: message.skipPermissions,
+        cols: message.cols,
+        rows: message.rows,
+      });
+      break;
+    }
+
+    case 'session:stop': {
+      // Stop the current session
+      sessionManager.stopSession();
       break;
     }
 
@@ -234,6 +292,7 @@ function handleClientMessage(ws: WebSocket, message: ClientMessage): void {
 process.on('SIGTERM', () => {
   console.log('Shutting down...');
   activeWorkflows.forEach((workflow) => workflow.stop());
+  sessionManager.dispose();
   wss.close();
   server.close();
   process.exit(0);

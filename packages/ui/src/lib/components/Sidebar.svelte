@@ -13,7 +13,7 @@
   <div class="sidebar-header">
     <a href="/" class="logo-link">
       <h1 class="logo-text" data-text="CodeSkillet"><span class="logo-code">Code</span><span class="logo-skillet">Skillet</span></h1>
-      <p class="tagline">"let it cook"</p>
+      <p class="tagline">"<span class="tagline-let-it">let it</span> <span class="tagline-cook">cook</span>"</p>
     </a>
     <div class="connection-status" class:connected>
       <span class="status-dot"></span>
@@ -91,6 +91,7 @@
     text-decoration: none;
     display: block;
     margin-bottom: var(--space-sm);
+    text-align: center;
   }
 
   .logo-text {

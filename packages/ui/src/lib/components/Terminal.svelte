@@ -2,24 +2,45 @@
   import { onMount, onDestroy } from 'svelte';
   import { Terminal } from '@xterm/xterm';
   import { FitAddon } from '@xterm/addon-fit';
-  import '@xterm/xterm/css/xterm.css';
-  import { projectsStore } from '../stores/projects';
+  import { Unicode11Addon } from '@xterm/addon-unicode11';
+  import { CanvasAddon } from '@xterm/addon-canvas';
+    import '@xterm/xterm/css/xterm.css';
+  import { sessionStore } from '../stores/session';
 
-  export let output: string;
+  export let interactive: boolean = true;
+  export let onResizeStart: ((e: MouseEvent) => void) | null = null;
 
   let terminalContainer: HTMLElement;
   let terminal: Terminal;
   let fitAddon: FitAddon;
   let lastOutputLength = 0;
+  let resizeObserver: ResizeObserver;
+
+  // Get reactive output from session store
+  $: terminalOutput = $sessionStore.terminalOutput;
+  $: sessionStatus = $sessionStore.status; // Used for clearing terminal on session start
+
+  // Track previous status to detect session start
+  let prevStatus = 'idle';
 
   onMount(() => {
     terminal = new Terminal({
-      fontFamily: 'var(--font-mono)',
+      // Use actual font names - xterm.js can't resolve CSS variables
+      // Platform-specific fonts with good Unicode block character support:
+      // - macOS: Menlo, Monaco
+      // - Windows: Cascadia Mono (Win Terminal), Consolas
+      // - Linux: DejaVu Sans Mono, Liberation Mono, Ubuntu Mono
+      fontFamily: 'Menlo, Monaco, "Cascadia Mono", "DejaVu Sans Mono", "Liberation Mono", "Ubuntu Mono", Consolas, "Courier New", monospace',
       fontSize: 13,
+      lineHeight: 1,
+      letterSpacing: 0,
+      customGlyphs: true,  // Pixel-perfect block/box drawing (requires Canvas/WebGL renderer)
       theme: {
         background: '#0d1117',
         foreground: '#c9d1d9',
         cursor: '#c9d1d9',
+        cursorAccent: '#0d1117',
+        selectionBackground: '#3392FF44',
         black: '#0d1117',
         red: '#ff7b72',
         green: '#3fb950',
@@ -37,69 +58,119 @@
         brightCyan: '#56d4dd',
         brightWhite: '#f0f6fc',
       },
-      cursorBlink: true,
+      cursorBlink: false,
       cursorStyle: 'block',
-      scrollback: 1000,
+      scrollback: 5000,
       convertEol: true,
+      allowProposedApi: true,
     });
 
     fitAddon = new FitAddon();
     terminal.loadAddon(fitAddon);
 
+    // Load Unicode11 addon for proper character width handling (box-drawing, emojis)
+    const unicode11Addon = new Unicode11Addon();
+    terminal.loadAddon(unicode11Addon);
+    terminal.unicode.activeVersion = '11';
+
     terminal.open(terminalContainer);
+
     fitAddon.fit();
 
-    // Write initial welcome message
-    terminal.writeln('\x1b[32m╔══════════════════════════════════════╗\x1b[0m');
-    terminal.writeln('\x1b[32m║       Code-Skillet Terminal          ║\x1b[0m');
-    terminal.writeln('\x1b[32m╚══════════════════════════════════════╝\x1b[0m');
-    terminal.writeln('');
+    // Load Canvas addon AFTER open() and fit() - needs real container dimensions
+    // Canvas addon supports customGlyphs for pixel-perfect block characters
+    try {
+      terminal.loadAddon(new CanvasAddon());
+      fitAddon.fit();
+      terminal.refresh(0, terminal.rows - 1);
+    } catch (e) {
+      console.warn('Canvas addon failed, using DOM renderer:', e);
+    }
+
+    // Handle keyboard input
+    if (interactive) {
+      terminal.onData((data: string) => {
+        sessionStore.sendInput(data);
+      });
+    }
 
     // Handle resize
-    const resizeObserver = new ResizeObserver(() => {
+    resizeObserver = new ResizeObserver(() => {
       fitAddon.fit();
+      // Send resize event to server
+      const { cols, rows } = terminal;
+      sessionStore.resize(cols, rows);
     });
     resizeObserver.observe(terminalContainer);
 
-    return () => {
-      resizeObserver.disconnect();
-    };
+    // Send initial size
+    const { cols, rows } = terminal;
+    sessionStore.resize(cols, rows);
   });
 
   onDestroy(() => {
+    resizeObserver?.disconnect();
     terminal?.dispose();
   });
 
   // Watch for output changes and write new content
   $: {
-    if (terminal && output.length > lastOutputLength) {
-      const newContent = output.slice(lastOutputLength);
+    if (terminal && terminalOutput.length > lastOutputLength) {
+      const newContent = terminalOutput.slice(lastOutputLength);
       terminal.write(newContent);
-      lastOutputLength = output.length;
+      lastOutputLength = terminalOutput.length;
     }
+  }
+
+  // Clear terminal when a new session starts
+  $: if (sessionStatus === 'running' && prevStatus !== 'running') {
+    terminal?.clear();
+    lastOutputLength = 0;
+  }
+  $: prevStatus = sessionStatus;
+
+  // Reset output tracking when terminal is cleared
+  $: if (terminalOutput.length === 0 && lastOutputLength > 0) {
+    lastOutputLength = 0;
+    terminal?.clear();
   }
 
   function handleClear() {
     terminal?.clear();
-    projectsStore.clearTerminal();
+    sessionStore.clearTerminal();
     lastOutputLength = 0;
   }
 </script>
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="terminal-wrapper">
-  <div class="terminal-header">
+  <div
+    class="terminal-header"
+    class:resizable={onResizeStart}
+    on:mousedown={onResizeStart}
+  >
     <span class="terminal-title">
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
         <polyline points="4 17 10 11 4 5" />
         <line x1="12" y1="19" x2="20" y2="19" />
       </svg>
       Terminal
     </span>
+
+    <!-- Chunky resize grip -->
+    {#if onResizeStart}
+      <div class="resize-grip">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    {/if}
+
     <div class="terminal-actions">
-      <button class="terminal-btn" on:click={handleClear} title="Clear terminal">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="3 6 5 6 21 6" />
-          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      <button class="terminal-btn" on:click|stopPropagation={handleClear} title="Clear terminal">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
         </svg>
       </button>
     </div>
@@ -119,18 +190,46 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-xs) var(--space-md);
+    padding: 4px var(--space-md);
     background-color: var(--bg-tertiary);
     border-bottom: 1px solid var(--border-color);
+  }
+
+  .terminal-header.resizable {
+    cursor: ns-resize;
+  }
+
+  .terminal-header.resizable:hover {
+    background-color: var(--bg-hover);
   }
 
   .terminal-title {
     display: flex;
     align-items: center;
-    gap: var(--space-xs);
-    font-size: 12px;
+    gap: 4px;
+    font-size: 11px;
     font-weight: 500;
     color: var(--text-secondary);
+  }
+
+  .resize-grip {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 2px 24px;
+  }
+
+  .resize-grip span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--border-color);
+    border-radius: 1px;
+    transition: background-color 0.15s ease;
+  }
+
+  .terminal-header.resizable:hover .resize-grip span {
+    background-color: var(--text-muted);
   }
 
   .terminal-actions {
@@ -142,8 +241,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     border-radius: 4px;
     color: var(--text-muted);
     transition: all 0.15s ease;
@@ -156,6 +255,8 @@
 
   .terminal-container {
     flex: 1;
+    height: 100%;
+    min-height: 200px;
     padding: var(--space-sm);
   }
 

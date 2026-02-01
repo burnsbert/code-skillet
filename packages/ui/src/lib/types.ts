@@ -44,7 +44,14 @@ export type ServerMessage =
   | { type: 'task:moved'; projectId: string; taskId: string; fromPhase: TaskPhase; toPhase: TaskPhase }
   | { type: 'plan:ready'; projectId: string; plan: string }
   | { type: 'terminal:output'; data: string }
-  | { type: 'error'; message: string };
+  | { type: 'error'; message: string }
+  | { type: 'session:started'; projectPath: string }
+  | { type: 'session:ended'; exitCode: number; reason: string }
+  | { type: 'session:error'; message: string }
+  | { type: 'session:status'; status: SessionStatus; projectPath: string | null };
+
+// Session status type
+export type SessionStatus = 'idle' | 'starting' | 'running' | 'stopped' | 'crashed';
 
 export type ClientMessage =
   | { type: 'project:subscribe'; projectId: string }
@@ -55,7 +62,10 @@ export type ClientMessage =
   | { type: 'plan:approve'; projectId: string }
   | { type: 'plan:reject'; projectId: string }
   | { type: 'plan:edit'; projectId: string; content: string }
-  | { type: 'terminal:input'; data: string };
+  | { type: 'terminal:input'; data: string }
+  | { type: 'terminal:resize'; cols: number; rows: number }
+  | { type: 'session:start'; projectPath: string; skipPermissions: boolean; cols?: number; rows?: number }
+  | { type: 'session:stop' };
 
 export const PHASE_LABELS: Record<TaskPhase, string> = {
   planned: 'Planned Tasks',

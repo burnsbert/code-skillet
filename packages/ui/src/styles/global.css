@@ -78,6 +78,12 @@ button {
   transition: all 0.15s ease;
 }
 
+.btn-sm {
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
 .btn-primary {
   background-color: var(--accent-primary);
   color: white;
