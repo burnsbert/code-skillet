@@ -12,7 +12,8 @@
 <aside class="sidebar">
   <div class="sidebar-header">
     <a href="/" class="logo-link">
-      <h1 class="logo-text"><span class="logo-code">Code</span><span class="logo-skillet">Skillet</span></h1>
+      <h1 class="logo-text" data-text="CodeSkillet"><span class="logo-code">Code</span><span class="logo-skillet">Skillet</span></h1>
+      <p class="tagline">"let it cook"</p>
     </a>
     <div class="connection-status" class:connected>
       <span class="status-dot"></span>
@@ -110,6 +111,18 @@
   @keyframes gradient-shift {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
+  }
+
+  .tagline {
+    font-family: var(--font-sans, system-ui, sans-serif);
+    font-size: 0.85rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--text-muted);
+    margin: 0;
+    margin-top: -2px;
+    letter-spacing: 0.5px;
+    opacity: 0.7;
   }
 
   .connection-status {
