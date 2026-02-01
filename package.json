@@ -1,0 +1,30 @@
+{
+  "name": "code-skillet",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Real-time visual dashboard for AI-assisted development",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:ui\"",
+    "dev:server": "npm run dev -w @code-skillet/server",
+    "dev:ui": "npm run dev -w @code-skillet/ui",
+    "build": "npm run build -w @code-skillet/server && npm run build -w @code-skillet/ui",
+    "lint": "npm run lint -w @code-skillet/server && npm run lint -w @code-skillet/ui",
+    "format": "prettier --write \"packages/**/*.{ts,svelte,json,css}\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.2.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT",
+  "author": "Eric Burns",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ericburns/code-skillet.git"
+  }
+}

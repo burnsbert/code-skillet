@@ -1,0 +1,123 @@
+import { writable, get } from 'svelte/store';
+
+export type Theme = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15' | '16';
+
+export interface ThemeInfo {
+  id: Theme;
+  name: string;
+  type: 'Dark' | 'Light';
+  preview: [string, string, string]; // [bg, surface, accent]
+}
+
+export const THEMES: ThemeInfo[] = [
+  { id: '1', name: 'Blue Notes', type: 'Dark', preview: ['#1a1a2e', '#16213e', '#ea580c'] },
+  { id: '2', name: 'Minecraft', type: 'Dark', preview: ['#5a4a3a', '#4a5d32', '#7cb342'] },
+  { id: '3', name: 'Knight Rider', type: 'Dark', preview: ['#0a0a0a', '#1a1a1a', '#ff1a1a'] },
+  { id: '4', name: 'Amethyst Dusk', type: 'Dark', preview: ['#1a1625', '#2d2640', '#a78bfa'] },
+  { id: '5', name: 'Warm Sand', type: 'Light', preview: ['#c9c0b0', '#ddd6c6', '#c2410c'] },
+  { id: '6', name: 'Ember Glow', type: 'Dark', preview: ['#1c1917', '#292524', '#f97316'] },
+  { id: '7', name: 'SNES Classic', type: 'Dark', preview: ['#1a1a24', '#2d2d3d', '#9d8cd6'] },
+  { id: '8', name: 'Crystal Fog', type: 'Light', preview: ['#c8d0d8', '#dce4eb', '#4a6fa5'] },
+  { id: '9', name: 'Super Famicom', type: 'Light', preview: ['#a8a8b8', '#c8c8d4', '#6b5b95'] },
+  { id: '10', name: 'Snowy Night', type: 'Dark', preview: ['#0a0c10', '#12151a', '#a8d4ff'] },
+  { id: '11', name: 'Portal 2', type: 'Dark', preview: ['#0d0d0d', '#1a1a1a', '#ff6b00'] },
+  { id: '12', name: 'Fallout', type: 'Dark', preview: ['#0a0a0a', '#0d1a0d', '#14ff00'] },
+  { id: '13', name: 'Emerald City', type: 'Dark', preview: ['#0a1a10', '#0f2818', '#50c878'] },
+  { id: '14', name: 'Whiteboard Post-Its', type: 'Light', preview: ['#e8e8e8', '#f5f5f5', '#e53935'] },
+  { id: '15', name: 'Blueprint', type: 'Dark', preview: ['#1a3a5c', '#1e4268', '#7ec8e3'] },
+  { id: '16', name: 'Coffee Shop', type: 'Light', preview: ['#f5f0e6', '#ebe4d6', '#8b5a2b'] },
+];
+
+export interface Settings {
+  theme: Theme;
+  terminalVisible: boolean;
+  terminalHeight: number;
+  dangerouslySkipPermissions: boolean;
+}
+
+const DEFAULT_SETTINGS: Settings = {
+  theme: '1',
+  terminalVisible: true,
+  terminalHeight: 200,
+  dangerouslySkipPermissions: false,
+};
+
+const STORAGE_KEY = 'code-skillet-settings';
+
+function loadSettings(): Settings {
+  if (typeof window === 'undefined') return DEFAULT_SETTINGS;
+
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      // Migrate old theme names to new numeric IDs
+      if (parsed.theme && typeof parsed.theme === 'string' && !parsed.theme.match(/^\d+$/)) {
+        parsed.theme = '1'; // Default to Blue Notes
+      }
+      return { ...DEFAULT_SETTINGS, ...parsed };
+    }
+  } catch {
+    // Ignore parse errors
+  }
+  return DEFAULT_SETTINGS;
+}
+
+function saveSettings(settings: Settings): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  } catch {
+    // Ignore storage errors
+  }
+}
+
+function applyTheme(theme: Theme): void {
+  if (typeof document !== 'undefined') {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+}
+
+function createSettingsStore() {
+  const settings = writable<Settings>(loadSettings());
+
+  // Apply theme on initial load
+  if (typeof window !== 'undefined') {
+    const initial = loadSettings();
+    applyTheme(initial.theme);
+  }
+
+  // Auto-save on changes
+  settings.subscribe((value) => {
+    saveSettings(value);
+  });
+
+  function setTheme(theme: Theme) {
+    settings.update((s) => ({ ...s, theme }));
+    applyTheme(theme);
+  }
+
+  function setTerminalVisible(visible: boolean) {
+    settings.update((s) => ({ ...s, terminalVisible: visible }));
+  }
+
+  function setTerminalHeight(height: number) {
+    const clamped = Math.max(100, Math.min(500, height));
+    settings.update((s) => ({ ...s, terminalHeight: clamped }));
+  }
+
+  function setDangerouslySkipPermissions(value: boolean) {
+    settings.update((s) => ({ ...s, dangerouslySkipPermissions: value }));
+  }
+
+  return {
+    subscribe: settings.subscribe,
+    setTheme,
+    setTerminalVisible,
+    setTerminalHeight,
+    setDangerouslySkipPermissions,
+  };
+}
+
+export const settingsStore = createSettingsStore();

@@ -1,0 +1,1008 @@
+/* Theme Variables - Ported from Crumbwise */
+
+/* Base spacing and font (shared across all themes) */
+:root {
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* Font */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+
+  --border-radius: 8px;
+}
+
+/* Theme 1: Blue Notes (Dark - Default) */
+:root, [data-theme="1"] {
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --bg-tertiary: #0f3460;
+  --bg-card: #0f3460;
+  --bg-hover: #1a4a7a;
+
+  --text-primary: #eee;
+  --text-secondary: #bbb;
+  --text-muted: #888;
+
+  --accent-primary: #ea580c;
+  --accent-secondary: #f97316;
+  --accent-success: #22c55e;
+  --accent-warning: #d29922;
+  --accent-error: #ef4444;
+
+  --border-color: #334155;
+  --card-hover-border: rgba(255, 255, 255, 0.4);
+  --card-hover-shadow: none;
+  --card-btn-bg: #1a4a7a;
+  --card-btn-border: #2a5a8a;
+  --card-btn-hover: #2a6a9a;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+
+  --terminal-bg: #0d1117;
+  --terminal-text: #c9d1d9;
+
+  --logo-gradient-start: #ea580c;
+  --logo-gradient-mid: #f97316;
+  --logo-gradient-end: #ea580c;
+  --logo-glow: rgba(234, 88, 12, 0.4);
+
+  --link-color: #60a5fa;
+}
+
+/* Theme 2: Minecraft (Dark - Grass Block) */
+[data-theme="2"] {
+  --bg-primary: #5a4a3a;
+  --bg-secondary: #4a5d32;
+  --bg-tertiary: #686868;
+  --bg-card: #686868;
+  --bg-hover: #7a7a7a;
+
+  --text-primary: #e8e8e8;
+  --text-secondary: #c8c8c8;
+  --text-muted: #a0a0a0;
+
+  --accent-primary: #7cbd6b;
+  --accent-secondary: #7cbd6b;
+  --accent-success: #7cbd6b;
+  --accent-warning: #cddc39;
+  --accent-error: #ef4444;
+
+  --border-color: #2d4020;
+  --card-hover-border: #7cbd6b;
+  --card-hover-shadow: none;
+  --card-btn-bg: #585858;
+  --card-btn-border: #6a6a6a;
+  --card-btn-hover: #7a7a7a;
+
+  --terminal-bg: #0a0a0a;
+  --terminal-text: #7cbd6b;
+
+  --logo-gradient-start: #5E9D34;
+  --logo-gradient-mid: #7cbd6b;
+  --logo-gradient-end: #5E9D34;
+  --logo-glow: rgba(124, 189, 107, 0.5);
+
+  --link-color: #7cbd6b;
+}
+
+/* Theme 3: Knight Rider (Dark - 80s Red Scanner) */
+[data-theme="3"] {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #2a2a2a;
+  --bg-card: #2a2a2a;
+  --bg-hover: #3a3a3a;
+
+  --text-primary: #e8e8e8;
+  --text-secondary: #c0c0c0;
+  --text-muted: #808080;
+
+  --accent-primary: #ff0808;
+  --accent-secondary: #ff1010;
+  --accent-success: #ff2020;
+  --accent-warning: #ffaa00;
+  --accent-error: #ff0000;
+
+  --border-color: #3a3a3a;
+  --card-hover-border: #ff0808;
+  --card-hover-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+  --card-btn-bg: #3a3a3a;
+  --card-btn-border: #4a4a4a;
+  --card-btn-hover: #4a4a4a;
+
+  --terminal-bg: #000000;
+  --terminal-text: #ff0808;
+
+  --logo-gradient-start: #ff0000;
+  --logo-gradient-mid: #ff1010;
+  --logo-gradient-end: #ff0000;
+  --logo-glow: rgba(255, 0, 0, 0.6);
+
+  --link-color: #ff1010;
+}
+
+/* Theme 4: Amethyst Dusk (Dark - Purple/Violet) */
+[data-theme="4"] {
+  --bg-primary: #1a1625;
+  --bg-secondary: #2d2640;
+  --bg-tertiary: #3d3558;
+  --bg-card: #3d3558;
+  --bg-hover: #4a4068;
+
+  --text-primary: #ede9fe;
+  --text-secondary: #c4b5fd;
+  --text-muted: #8b7faa;
+
+  --accent-primary: #a78bfa;
+  --accent-secondary: #8b5cf6;
+  --accent-success: #c4b5fd;
+  --accent-warning: #fbbf24;
+  --accent-error: #f43f5e;
+
+  --border-color: #4c1d95;
+  --card-hover-border: #a78bfa;
+  --card-hover-shadow: 0 0 8px rgba(167, 139, 250, 0.25);
+  --card-btn-bg: #4a4068;
+  --card-btn-border: #5a5078;
+  --card-btn-hover: #6a6088;
+
+  --terminal-bg: #0a0814;
+  --terminal-text: #c4b5fd;
+
+  --logo-gradient-start: #8b5cf6;
+  --logo-gradient-mid: #a78bfa;
+  --logo-gradient-end: #8b5cf6;
+  --logo-glow: rgba(139, 92, 246, 0.4);
+
+  --link-color: #a78bfa;
+}
+
+/* Theme 5: Warm Sand (Light - Warm/Neutral) */
+[data-theme="5"] {
+  --bg-primary: #c9c0b0;
+  --bg-secondary: #ddd6c6;
+  --bg-tertiary: #f8f5f0;
+  --bg-card: #f8f5f0;
+  --bg-hover: #d8c8b0;
+
+  --text-primary: #292524;
+  --text-secondary: #57534e;
+  --text-muted: #6b655c;
+
+  --accent-primary: #c2410c;
+  --accent-secondary: #ea580c;
+  --accent-success: #16a34a;
+  --accent-warning: #ca8a04;
+  --accent-error: #dc2626;
+
+  --border-color: #c4b498;
+  --card-hover-border: #c2410c;
+  --card-hover-shadow: 0 2px 8px rgba(194, 65, 12, 0.15);
+  --card-btn-bg: #d8c8b0;
+  --card-btn-border: #c4b498;
+  --card-btn-hover: #c8b8a0;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+  --terminal-bg: #1e293b;
+  --terminal-text: #e2e8f0;
+
+  --logo-gradient-start: #c2410c;
+  --logo-gradient-mid: #ea580c;
+  --logo-gradient-end: #c2410c;
+  --logo-glow: rgba(194, 65, 12, 0.3);
+
+  --link-color: #b45309;
+}
+
+/* Theme 6: Ember Glow (Dark - Warm/Red) */
+[data-theme="6"] {
+  --bg-primary: #1c1917;
+  --bg-secondary: #292524;
+  --bg-tertiary: #3d3533;
+  --bg-card: #3d3533;
+  --bg-hover: #4a3f3d;
+
+  --text-primary: #fafaf9;
+  --text-secondary: #e7e5e4;
+  --text-muted: #a8a29e;
+
+  --accent-primary: #f97316;
+  --accent-secondary: #dc2626;
+  --accent-success: #22c55e;
+  --accent-warning: #eab308;
+  --accent-error: #ef4444;
+
+  --border-color: #5c4f4c;
+  --card-hover-border: rgba(255, 255, 255, 0.4);
+  --card-hover-shadow: none;
+  --card-btn-bg: #4a3f3d;
+  --card-btn-border: #5c4f4c;
+  --card-btn-hover: #6a5a56;
+
+  --terminal-bg: #0a0808;
+  --terminal-text: #fafaf9;
+
+  --logo-gradient-start: #dc2626;
+  --logo-gradient-mid: #f97316;
+  --logo-gradient-end: #dc2626;
+  --logo-glow: rgba(249, 115, 22, 0.4);
+
+  --link-color: #60a5fa;
+}
+
+/* Theme 7: SNES Classic (Dark - Retro Gaming) */
+[data-theme="7"] {
+  --bg-primary: #1a1a24;
+  --bg-secondary: #2d2d3d;
+  --bg-tertiary: #3d3d52;
+  --bg-card: #3d3d52;
+  --bg-hover: #4a4a6a;
+
+  --text-primary: #e8e8f0;
+  --text-secondary: #c8c8d8;
+  --text-muted: #8888a0;
+
+  --accent-primary: #9d8cd6;
+  --accent-secondary: #7b68c4;
+  --accent-success: #a0d0a0;
+  --accent-warning: #d0c060;
+  --accent-error: #ef4444;
+
+  --border-color: #5a5a7a;
+  --card-hover-border: #9d8cd6;
+  --card-hover-shadow: 0 0 6px rgba(157, 140, 214, 0.3);
+  --card-btn-bg: #4a4a6a;
+  --card-btn-border: #5a5a7a;
+  --card-btn-hover: #6a6a8a;
+
+  --terminal-bg: #0a0a14;
+  --terminal-text: #c8c8d8;
+
+  --logo-gradient-start: #7b68c4;
+  --logo-gradient-mid: #9d8cd6;
+  --logo-gradient-end: #c4b5e8;
+  --logo-glow: rgba(157, 140, 214, 0.4);
+
+  --link-color: #a090d0;
+}
+
+/* Theme 8: Crystal Fog (Light - Blue/Classic) */
+[data-theme="8"] {
+  --bg-primary: #c8d0d8;
+  --bg-secondary: #dce4eb;
+  --bg-tertiary: #f5f8fd;
+  --bg-card: #f5f8fd;
+  --bg-hover: #d0dce8;
+
+  --text-primary: #2a3540;
+  --text-secondary: #4a5a6a;
+  --text-muted: #5c6d7a;
+
+  --accent-primary: #4a6fa5;
+  --accent-secondary: #6890c0;
+  --accent-success: #16a34a;
+  --accent-warning: #ca8a04;
+  --accent-error: #dc2626;
+
+  --border-color: #b8c8d8;
+  --card-hover-border: #4a6fa5;
+  --card-hover-shadow: 0 2px 8px rgba(74, 111, 165, 0.15);
+  --card-btn-bg: #d0dce8;
+  --card-btn-border: #b8c8d8;
+  --card-btn-hover: #c0d0e0;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+  --terminal-bg: #1e293b;
+  --terminal-text: #e2e8f0;
+
+  --logo-gradient-start: #4a6fa5;
+  --logo-gradient-mid: #6890c0;
+  --logo-gradient-end: #4a6fa5;
+  --logo-glow: rgba(74, 111, 165, 0.3);
+
+  --link-color: #3a6ea5;
+}
+
+/* Theme 9: Super Famicom (Light - Retro Console) */
+[data-theme="9"] {
+  --bg-primary: #a8a8b8;
+  --bg-secondary: #c8c8d4;
+  --bg-tertiary: #dcdce8;
+  --bg-card: #dcdce8;
+  --bg-hover: #b8b8c8;
+
+  --text-primary: #2a2a3a;
+  --text-secondary: #3a3a4a;
+  --text-muted: #4a4a60;
+
+  --accent-primary: #6b5b95;
+  --accent-secondary: #5b4b85;
+  --accent-success: #22a060;
+  --accent-warning: #b8a030;
+  --accent-error: #dc2626;
+
+  --border-color: #a0a0b4;
+  --card-hover-border: #6b5b95;
+  --card-hover-shadow: 0 2px 6px rgba(107, 91, 149, 0.2);
+  --card-btn-bg: #b8b8c8;
+  --card-btn-border: #a0a0b4;
+  --card-btn-hover: #c4c4d4;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+  --terminal-bg: #1e293b;
+  --terminal-text: #e2e8f0;
+
+  --logo-gradient-start: #4f4f8f;
+  --logo-gradient-mid: #4f4f8f;
+  --logo-gradient-end: #4f4f8f;
+  --logo-glow: rgba(79, 79, 143, 0.3);
+
+  --link-color: #5b4b85;
+}
+
+/* Theme 10: Snowy Night (Dark - Winter Evening) */
+[data-theme="10"] {
+  --bg-primary: #0a0c10;
+  --bg-secondary: #12151a;
+  --bg-tertiary: #1a1e24;
+  --bg-card: #1a1e24;
+  --bg-hover: #1e2228;
+
+  --text-primary: #e0e4e8;
+  --text-secondary: #b8c4d0;
+  --text-muted: #6a7078;
+
+  --accent-primary: #a8d4ff;
+  --accent-secondary: #ffffff;
+  --accent-success: #6dd4a0;
+  --accent-warning: #f0c060;
+  --accent-error: #ef5350;
+
+  --border-color: #2a3038;
+  --card-hover-border: #a8d4ff;
+  --card-hover-shadow: 0 0 15px rgba(168, 212, 255, 0.2);
+  --card-btn-bg: #1e2228;
+  --card-btn-border: #2a3038;
+  --card-btn-hover: #262c34;
+
+  --terminal-bg: #000408;
+  --terminal-text: #a8d4ff;
+
+  --logo-gradient-start: #ffffff;
+  --logo-gradient-mid: #a8d4ff;
+  --logo-gradient-end: #ffffff;
+  --logo-glow: rgba(168, 212, 255, 0.5);
+
+  --link-color: #a8d4ff;
+}
+
+/* Theme 11: Portal 2 (Dark - Abandoned Aperture) */
+[data-theme="11"] {
+  --bg-primary: #0d0d0d;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #252525;
+  --bg-card: #252525;
+  --bg-hover: #333333;
+
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --text-muted: #808080;
+
+  --accent-primary: #ff6b00;
+  --accent-secondary: #00a2ff;
+  --accent-success: #4caf50;
+  --accent-warning: #ff6b00;
+  --accent-error: #f44336;
+
+  --border-color: #333333;
+  --card-hover-border: #00a2ff;
+  --card-hover-shadow: 0 0 12px rgba(0, 162, 255, 0.4), 0 0 12px rgba(255, 107, 0, 0.4);
+  --card-btn-bg: #333333;
+  --card-btn-border: #444444;
+  --card-btn-hover: #404040;
+
+  --terminal-bg: #000000;
+  --terminal-text: #00a2ff;
+
+  --logo-gradient-start: #ff6b00;
+  --logo-gradient-mid: #ffffff;
+  --logo-gradient-end: #00a2ff;
+  --logo-glow: rgba(255, 107, 0, 0.5);
+
+  --link-color: #00a2ff;
+}
+
+/* Theme 12: Fallout (Dark - Pip-Boy Terminal) */
+[data-theme="12"] {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #0d1a0d;
+  --bg-tertiary: #0f2010;
+  --bg-card: #0f2010;
+  --bg-hover: #0d2a0d;
+
+  --text-primary: #14ff00;
+  --text-secondary: #10cc00;
+  --text-muted: #0a8800;
+
+  --accent-primary: #14ff00;
+  --accent-secondary: #0d6600;
+  --accent-success: #14ff00;
+  --accent-warning: #b8ff00;
+  --accent-error: #ff4444;
+
+  --border-color: #0a5500;
+  --card-hover-border: #14ff00;
+  --card-hover-shadow: 0 0 10px rgba(20, 255, 0, 0.3);
+  --card-btn-bg: #0d2a0d;
+  --card-btn-border: #0a5500;
+  --card-btn-hover: #0f3a0f;
+
+  --terminal-bg: #000000;
+  --terminal-text: #14ff00;
+
+  --logo-gradient-start: #0a8800;
+  --logo-gradient-mid: #14ff00;
+  --logo-gradient-end: #0a8800;
+  --logo-glow: rgba(20, 255, 0, 0.6);
+
+  --link-color: #14ff00;
+}
+
+/* Theme 13: Emerald City (Dark - Wizard of Oz) */
+[data-theme="13"] {
+  --bg-primary: #0a1a10;
+  --bg-secondary: #0f2818;
+  --bg-tertiary: #1a3a24;
+  --bg-card: #1a3a24;
+  --bg-hover: #1a4a28;
+
+  --text-primary: #d0f0d8;
+  --text-secondary: #a0d0a8;
+  --text-muted: #6a9a78;
+
+  --accent-primary: #ffd700;
+  --accent-secondary: #50c878;
+  --accent-success: #50c878;
+  --accent-warning: #ffd700;
+  --accent-error: #ef4444;
+
+  --border-color: #2a5a38;
+  --card-hover-border: #50c878;
+  --card-hover-shadow: 0 0 15px rgba(80, 200, 120, 0.3);
+  --card-btn-bg: #1a4a28;
+  --card-btn-border: #2a5a38;
+  --card-btn-hover: #2a6a40;
+
+  --terminal-bg: #000a04;
+  --terminal-text: #50c878;
+
+  --logo-gradient-start: #50c878;
+  --logo-gradient-mid: #50c878;
+  --logo-gradient-end: #50c878;
+  --logo-glow: rgba(80, 200, 120, 0.6);
+
+  --link-color: #50c878;
+}
+
+/* Theme 14: Whiteboard Post-Its (Light) */
+[data-theme="14"] {
+  --bg-primary: #e8e8e8;
+  --bg-secondary: #f5f5f5;
+  --bg-tertiary: #fff9b0;
+  --bg-card: #fff9b0;
+  --bg-hover: #f0e68c;
+
+  --text-primary: #333333;
+  --text-secondary: #555555;
+  --text-muted: #666666;
+
+  --accent-primary: #e53935;
+  --accent-secondary: #ff7043;
+  --accent-success: #43a047;
+  --accent-warning: #fb8c00;
+  --accent-error: #e53935;
+
+  --border-color: #aaaaaa;
+  --card-hover-border: #333333;
+  --card-hover-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15);
+  --card-btn-bg: #f0e68c;
+  --card-btn-border: #ddd685;
+  --card-btn-hover: #e6dc7a;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+  --terminal-bg: #1e293b;
+  --terminal-text: #e2e8f0;
+
+  --logo-gradient-start: #e53935;
+  --logo-gradient-mid: #ff7043;
+  --logo-gradient-end: #e53935;
+  --logo-glow: rgba(229, 57, 53, 0.3);
+
+  --link-color: #1e88e5;
+}
+
+/* Theme 15: Blueprint (Dark) */
+[data-theme="15"] {
+  --bg-primary: #1a3a5c;
+  --bg-secondary: #1e4268;
+  --bg-tertiary: #234b74;
+  --bg-card: #234b74;
+  --bg-hover: #2a5a8a;
+
+  --text-primary: #e8f4f8;
+  --text-secondary: #c0d8e8;
+  --text-muted: #8eb8d4;
+
+  --accent-primary: #7ec8e3;
+  --accent-secondary: #ffffff;
+  --accent-success: #7ec8e3;
+  --accent-warning: #e8a87c;
+  --accent-error: #ef5350;
+
+  --border-color: rgba(126, 200, 227, 0.3);
+  --card-hover-border: rgba(255, 255, 255, 0.5);
+  --card-hover-shadow: none;
+  --card-btn-bg: #2a5a8a;
+  --card-btn-border: #3a6a9a;
+  --card-btn-hover: #4a7aaa;
+
+  --terminal-bg: #0a1828;
+  --terminal-text: #7ec8e3;
+
+  --logo-gradient-start: #ffffff;
+  --logo-gradient-mid: #7ec8e3;
+  --logo-gradient-end: #ffffff;
+  --logo-glow: rgba(126, 200, 227, 0.5);
+
+  --link-color: #7ec8e3;
+}
+
+/* Theme 16: Coffee Shop (Light) */
+[data-theme="16"] {
+  --bg-primary: #f5f0e6;
+  --bg-secondary: #ebe4d6;
+  --bg-tertiary: #fff8f0;
+  --bg-card: #fff8f0;
+  --bg-hover: #d4a574;
+
+  --text-primary: #3d2b1f;
+  --text-secondary: #5a4030;
+  --text-muted: #7a6558;
+
+  --accent-primary: #8b5a2b;
+  --accent-secondary: #a67c52;
+  --accent-success: #6f4e37;
+  --accent-warning: #c17f59;
+  --accent-error: #c62828;
+
+  --border-color: rgba(139, 90, 43, 0.15);
+  --card-hover-border: rgba(139, 90, 43, 0.4);
+  --card-hover-shadow: 0 2px 8px rgba(139, 90, 43, 0.15);
+  --card-btn-bg: #d4a574;
+  --card-btn-border: #c49464;
+  --card-btn-hover: #b48454;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+  --terminal-bg: #3d2b1f;
+  --terminal-text: #f5f0e6;
+
+  --logo-gradient-start: #6f4e37;
+  --logo-gradient-mid: #a67c52;
+  --logo-gradient-end: #6f4e37;
+  --logo-glow: rgba(139, 90, 43, 0.3);
+
+  --link-color: #8b5a2b;
+}
+
+/* ==========================================
+   LOGO ANIMATIONS
+   ========================================== */
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes kitt-scanner {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.8),
+                 0 0 40px rgba(255, 0, 0, 0.4),
+                 -20px 0 30px rgba(255, 0, 0, 0);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(255, 0, 0, 1),
+                 0 0 60px rgba(255, 0, 0, 0.6),
+                 20px 0 30px rgba(255, 0, 0, 0.3);
+  }
+}
+
+@keyframes terminal-flicker {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(20, 255, 0, 0.8),
+                 0 0 20px rgba(20, 255, 0, 0.4),
+                 0 0 40px rgba(20, 255, 0, 0.2);
+  }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+
+@keyframes emerald-shimmer {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(80, 200, 120, 0.8),
+                 0 0 40px rgba(255, 215, 0, 0.3);
+    filter: drop-shadow(0 0 10px rgba(80, 200, 120, 0.5));
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(80, 200, 120, 1),
+                 0 0 60px rgba(255, 215, 0, 0.6);
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
+  }
+}
+
+/* ==========================================
+   THEME-SPECIFIC LOGO STYLING
+   ========================================== */
+
+/* Minecraft (2): Pixelated monospace logo */
+[data-theme="2"] .logo-text {
+  font-family: 'Courier New', monospace !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: min(2.2rem, 12cqw) !important;
+  white-space: nowrap;
+  animation: none !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: var(--accent-primary) !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* Knight Rider (3): KITT scanner effect */
+[data-theme="3"] .logo-text {
+  animation: kitt-scanner 2s ease-in-out infinite !important;
+  text-shadow: 0 0 20px rgba(255, 0, 0, 0.8),
+               0 0 40px rgba(255, 0, 0, 0.4);
+}
+
+/* Super Famicom (9): No animation */
+[data-theme="9"] .logo-text {
+  animation: none;
+  background-size: 100% 100%;
+}
+
+/* Snowy Night (10): Soft glow */
+[data-theme="10"] .logo-text {
+  text-shadow: 0 0 20px rgba(168, 212, 255, 0.6),
+               0 0 40px rgba(255, 255, 255, 0.3);
+}
+
+/* Portal 2 (11): Split blue/orange - CODE blue, SKILLET orange */
+[data-theme="11"] .logo-text {
+  font-family: 'Segoe UI', 'Roboto', sans-serif !important;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: min(2.4rem, 12cqw) !important;
+  white-space: nowrap;
+  background: none !important;
+  -webkit-text-fill-color: unset !important;
+  animation: none !important;
+}
+
+[data-theme="11"] .logo-code {
+  color: #00a2ff;
+  filter: drop-shadow(0 0 15px rgba(0, 162, 255, 0.5));
+}
+
+[data-theme="11"] .logo-skillet {
+  color: #ff6b00;
+  filter: drop-shadow(0 0 15px rgba(255, 107, 0, 0.5));
+}
+
+/* Fallout (12): Terminal monospace with flicker */
+[data-theme="12"] .logo-text {
+  font-family: 'Courier New', monospace !important;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: min(2.4rem, 14cqw) !important;
+  white-space: nowrap;
+  animation: terminal-flicker 4s ease-in-out infinite !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  text-shadow: 0 0 10px rgba(20, 255, 0, 0.6);
+  filter: none !important;
+}
+
+/* Emerald City (13): Serif with shimmer */
+[data-theme="13"] .logo-text {
+  font-family: 'Georgia', serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px;
+  font-size: min(2.4rem, 13cqw) !important;
+  white-space: nowrap;
+  animation: emerald-shimmer 3s ease-in-out infinite;
+  background: #50c878 !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Whiteboard Post-Its (14): Handwritten, no gradient */
+[data-theme="14"] .logo-text {
+  font-family: 'Permanent Marker', 'Comic Sans MS', cursive !important;
+  font-weight: 400;
+  letter-spacing: 1px;
+  animation: none;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #222222 !important;
+  color: #222222;
+  text-shadow: none;
+  filter: none;
+}
+
+/* Blueprint (15): Technical monospace */
+[data-theme="15"] .logo-text {
+  font-family: 'Courier New', monospace !important;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: min(2.4rem, 15cqw) !important;
+  white-space: nowrap;
+  animation: none;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #e8f4f8 !important;
+  color: #e8f4f8;
+  text-shadow: none;
+  filter: none;
+}
+
+/* ==========================================
+   THEME-SPECIFIC BACKGROUND PATTERNS
+   ========================================== */
+
+/* Minecraft (2): Solid brown background */
+[data-theme="2"] body {
+  background-color: #5a4a3a;
+}
+
+/* Whiteboard Post-Its (14): Solid light gray background */
+[data-theme="14"] body {
+  background: #e0e0e0;
+}
+
+/* Blueprint (15): Technical grid */
+[data-theme="15"] body {
+  background:
+    linear-gradient(rgba(126, 200, 227, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(126, 200, 227, 0.12) 1px, transparent 1px),
+    var(--bg-primary);
+  background-size: 20px 20px, 20px 20px, auto;
+  background-attachment: fixed;
+}
+
+/* Fallout (12): Scanline overlay */
+[data-theme="12"] body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 9999;
+}
+
+/* ==========================================
+   THEME-SPECIFIC CARD STYLING
+   ========================================== */
+
+/* All themes: Use card-hover variables */
+.task-card:hover {
+  border-color: var(--card-hover-border);
+  box-shadow: var(--card-hover-shadow);
+}
+
+/* Minecraft (2): Pixelated cards */
+[data-theme="2"] .task-card,
+[data-theme="2"] .card,
+[data-theme="2"] .kanban-column {
+  border-radius: 0 !important;
+}
+
+[data-theme="2"] .task-card {
+  box-shadow:
+    4px 4px 0 0 #1a2618,
+    inset 2px 2px 0 0 rgba(255,255,255,0.1) !important;
+}
+
+[data-theme="2"] .btn,
+[data-theme="2"] button {
+  border-radius: 0;
+}
+
+/* Snowy Night (10): Icy glow */
+[data-theme="10"] .task-card {
+  border: 1px solid rgba(168, 212, 255, 0.2);
+}
+
+/* Portal 2 (11): Dual portal glow */
+[data-theme="11"] .task-card:hover {
+  border-color: #00a2ff;
+  box-shadow:
+    0 0 15px rgba(0, 162, 255, 0.4),
+    0 0 15px rgba(255, 107, 0, 0.4);
+}
+
+/* Fallout (12): Terminal styling */
+[data-theme="12"] .task-card,
+[data-theme="12"] .card,
+[data-theme="12"] .kanban-column {
+  border-radius: 0 !important;
+  border-color: #0a5500 !important;
+}
+
+[data-theme="12"] .task-card {
+  box-shadow:
+    inset 0 0 10px rgba(20, 255, 0, 0.05),
+    0 0 5px rgba(20, 255, 0, 0.1) !important;
+}
+
+[data-theme="12"] .task-card:hover {
+  box-shadow:
+    inset 0 0 15px rgba(20, 255, 0, 0.1),
+    0 0 10px rgba(20, 255, 0, 0.2) !important;
+}
+
+[data-theme="12"] .task-title {
+  text-shadow: 0 0 8px rgba(20, 255, 0, 0.4);
+}
+
+[data-theme="12"] .btn,
+[data-theme="12"] button {
+  border-radius: 0;
+}
+
+/* Emerald City (13): Green glow */
+[data-theme="13"] .task-card {
+  border: 1px solid #2a5a38;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(80, 200, 120, 0.1);
+}
+
+[data-theme="13"] .task-card:hover {
+  border-color: #50c878;
+  box-shadow: 0 0 20px rgba(80, 200, 120, 0.25);
+}
+
+/* Whiteboard Post-Its (14): Rotated colored cards */
+[data-theme="14"] .task-card {
+  border-radius: 1px !important;
+  box-shadow:
+    2px 3px 5px rgba(0, 0, 0, 0.2),
+    0 0 1px rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
+  font-family: 'Comic Sans MS', 'Segoe Print', cursive, sans-serif;
+  color: #333333;
+}
+
+[data-theme="14"] .task-card:nth-child(4n+1) {
+  background: #fff9b0 !important;
+  transform: rotate(-1.5deg) !important;
+}
+
+[data-theme="14"] .task-card:nth-child(4n+2) {
+  background: #b0e0ff !important;
+  transform: rotate(1deg) !important;
+}
+
+[data-theme="14"] .task-card:nth-child(4n+3) {
+  background: #ffb0d0 !important;
+  transform: rotate(-0.5deg) !important;
+}
+
+[data-theme="14"] .task-card:nth-child(4n) {
+  background: #b0ffb0 !important;
+  transform: rotate(1.5deg) !important;
+}
+
+[data-theme="14"] .task-card:hover {
+  transform: rotate(0deg) translateY(-2px) !important;
+  box-shadow: 4px 6px 12px rgba(0, 0, 0, 0.25) !important;
+  z-index: 10;
+}
+
+[data-theme="14"] .task-meta {
+  color: #555555;
+}
+
+[data-theme="14"] .task-agent {
+  color: #1e88e5 !important;
+}
+
+[data-theme="14"] .kanban-column {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #aaaaaa;
+  border-radius: 2px;
+}
+
+[data-theme="14"] .column-header {
+  font-family: 'Permanent Marker', 'Comic Sans MS', cursive, sans-serif;
+}
+
+/* Blueprint (15): Technical drawing style */
+[data-theme="15"] .task-card,
+[data-theme="15"] .card,
+[data-theme="15"] .kanban-column {
+  border-radius: 0 !important;
+  border: 1px solid rgba(126, 200, 227, 0.4) !important;
+}
+
+[data-theme="15"] .kanban-column {
+  background: rgba(30, 66, 104, 0.7);
+}
+
+[data-theme="15"] .column-header {
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+[data-theme="15"] .btn,
+[data-theme="15"] button {
+  border-radius: 0;
+  font-family: 'Courier New', monospace;
+}
+
+/* Coffee Shop (16): Warm styling */
+[data-theme="16"] .task-card {
+  border: 1px solid rgba(139, 90, 43, 0.15);
+  box-shadow: 0 1px 3px rgba(139, 90, 43, 0.08);
+}
+
+[data-theme="16"] .kanban-column {
+  background: rgba(255, 248, 240, 0.5);
+  border: 1px solid rgba(139, 90, 43, 0.1);
+}
