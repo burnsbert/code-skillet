@@ -10,7 +10,7 @@ export interface ThemeInfo {
 }
 
 export const THEMES: ThemeInfo[] = [
-  { id: '6', name: 'Hot Skillet', type: 'Dark', preview: ['#1c1917', '#292524', '#f97316'] },
+  { id: '6', name: 'Skillet and Flame', type: 'Dark', preview: ['#1c1917', '#292524', '#f97316'] },
   { id: '4', name: 'Amethyst Dusk', type: 'Dark', preview: ['#1a1625', '#2d2640', '#a78bfa'] },
   { id: '2', name: 'Blockland', type: 'Dark', preview: ['#5a4a3a', '#4a5d32', '#7cb342'] },
   { id: '15', name: 'Blueprint', type: 'Dark', preview: ['#1a3a5c', '#1e4268', '#7ec8e3'] },
