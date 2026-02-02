@@ -10,27 +10,28 @@ export interface ThemeInfo {
 }
 
 export const THEMES: ThemeInfo[] = [
-  { id: '1', name: 'Blue Notes', type: 'Dark', preview: ['#1a1a2e', '#16213e', '#ea580c'] },
-  { id: '2', name: 'Blockland', type: 'Dark', preview: ['#5a4a3a', '#4a5d32', '#7cb342'] },
-  { id: '3', name: 'Talking Car', type: 'Dark', preview: ['#0a0a0a', '#1a1a1a', '#ff1a1a'] },
+  { id: '6', name: 'Hot Skillet', type: 'Dark', preview: ['#1c1917', '#292524', '#f97316'] },
   { id: '4', name: 'Amethyst Dusk', type: 'Dark', preview: ['#1a1625', '#2d2640', '#a78bfa'] },
-  { id: '5', name: 'Warm Sand', type: 'Light', preview: ['#c9c0b0', '#ddd6c6', '#c2410c'] },
-  { id: '6', name: 'Ember Glow', type: 'Dark', preview: ['#1c1917', '#292524', '#f97316'] },
+  { id: '2', name: 'Blockland', type: 'Dark', preview: ['#5a4a3a', '#4a5d32', '#7cb342'] },
+  { id: '15', name: 'Blueprint', type: 'Dark', preview: ['#1a3a5c', '#1e4268', '#7ec8e3'] },
+  { id: '1', name: 'Blue Notes', type: 'Dark', preview: ['#1a1a2e', '#16213e', '#ea580c'] },
   { id: '7', name: 'Classic Console', type: 'Dark', preview: ['#1a1a24', '#2d2d3d', '#9d8cd6'] },
+  { id: '16', name: 'Coffee Shop', type: 'Light', preview: ['#f5f0e6', '#ebe4d6', '#8b5a2b'] },
   { id: '8', name: 'Crystal Fog', type: 'Light', preview: ['#c8d0d8', '#dce4eb', '#4a6fa5'] },
   { id: '9', name: 'Family Console', type: 'Light', preview: ['#a8a8b8', '#c8c8d4', '#6b5b95'] },
   { id: '10', name: 'Snowy Night', type: 'Dark', preview: ['#0a0c10', '#12151a', '#a8d4ff'] },
+  { id: '3', name: 'Talking Car', type: 'Dark', preview: ['#0a0a0a', '#1a1a1a', '#ff1a1a'] },
   { id: '11', name: 'Two Portals', type: 'Dark', preview: ['#0d0d0d', '#1a1a1a', '#ff6b00'] },
+  { id: '5', name: 'Warm Sand', type: 'Light', preview: ['#c9c0b0', '#ddd6c6', '#c2410c'] },
   { id: '12', name: 'Wasteland', type: 'Dark', preview: ['#0a0a0a', '#0d1a0d', '#14ff00'] },
   { id: '14', name: 'Whiteboard Post-Its', type: 'Light', preview: ['#e8e8e8', '#f5f5f5', '#e53935'] },
-  { id: '15', name: 'Blueprint', type: 'Dark', preview: ['#1a3a5c', '#1e4268', '#7ec8e3'] },
-  { id: '16', name: 'Coffee Shop', type: 'Light', preview: ['#f5f0e6', '#ebe4d6', '#8b5a2b'] },
 ];
 
 export interface Settings {
   theme: Theme;
   terminalVisible: boolean;
   terminalHeight: number;
+  promptForPermissions: boolean;
   dangerouslySkipPermissions: boolean;
 }
 
@@ -38,6 +39,7 @@ const DEFAULT_SETTINGS: Settings = {
   theme: '6',
   terminalVisible: true,
   terminalHeight: 200,
+  promptForPermissions: false,
   dangerouslySkipPermissions: true,
 };
 
@@ -106,6 +108,10 @@ function createSettingsStore() {
     settings.update((s) => ({ ...s, terminalHeight: clamped }));
   }
 
+  function setPromptForPermissions(value: boolean) {
+    settings.update((s) => ({ ...s, promptForPermissions: value }));
+  }
+
   function setDangerouslySkipPermissions(value: boolean) {
     settings.update((s) => ({ ...s, dangerouslySkipPermissions: value }));
   }
@@ -115,6 +121,7 @@ function createSettingsStore() {
     setTheme,
     setTerminalVisible,
     setTerminalHeight,
+    setPromptForPermissions,
     setDangerouslySkipPermissions,
   };
 }

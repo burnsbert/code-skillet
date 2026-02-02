@@ -1,7 +1,14 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
   import { settingsStore, THEMES } from '../lib/stores/settings';
 
+  const dispatch = createEventDispatcher<{ back: void }>();
+
   $: settings = $settingsStore;
+
+  function handleBack() {
+    dispatch('back');
+  }
 </script>
 
 <div class="settings">
@@ -10,6 +17,7 @@
   </header>
 
   <div class="settings-content">
+    <div class="settings-inner">
     <section class="settings-section">
       <h2>Appearance</h2>
 
@@ -80,9 +88,33 @@
       <div class="setting-group">
         <div class="setting-row">
           <div class="setting-info">
+            <label class="setting-label">Prompt for Permission Decision</label>
+            <p class="setting-description">
+              Ask before each session whether to skip permission prompts.
+              When disabled, uses your default choice below automatically.
+            </p>
+          </div>
+          <label class="toggle">
+            <input
+              type="checkbox"
+              checked={settings.promptForPermissions}
+              on:change={(e) => settingsStore.setPromptForPermissions(e.currentTarget.checked)}
+            />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-row">
+          <div class="setting-info">
             <label class="setting-label text-warning">Dangerously Skip Permissions</label>
             <p class="setting-description">
-              Skip permission prompts when running Claude Code sessions.
+              {#if settings.promptForPermissions}
+                Default choice when prompted (highlighted in modal).
+              {:else}
+                Automatically skip permission prompts when running Claude Code sessions.
+              {/if}
               <strong class="text-warning">Use with caution!</strong>
             </p>
           </div>
@@ -97,7 +129,18 @@
         </div>
       </div>
     </section>
+    </div>
   </div>
+
+  <footer class="settings-footer">
+    <span class="auto-save-note">Settings are saved automatically as you change them</span>
+    <button class="btn btn-secondary" on:click={handleBack}>
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+      Back
+    </button>
+  </footer>
 </div>
 
 <style>
@@ -123,6 +166,9 @@
     flex: 1;
     overflow-y: auto;
     padding: var(--space-lg);
+  }
+
+  .settings-inner {
     max-width: 900px;
   }
 
@@ -298,5 +344,43 @@
     color: var(--text-muted);
     font-family: var(--font-mono);
     min-width: 50px;
+  }
+
+  .settings-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-lg);
+    border-top: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+  }
+
+  .auto-save-note {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: var(--border-radius);
+    transition: all 0.15s ease;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-secondary {
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--bg-hover);
+    color: var(--text-primary);
   }
 </style>

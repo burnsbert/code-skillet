@@ -1,15 +1,28 @@
 <script lang="ts">
   import Sidebar from './lib/components/Sidebar.svelte';
-  import Dashboard from './routes/Dashboard.svelte';
-  import Settings from './routes/Settings.svelte';
   import Terminal from './lib/components/Terminal.svelte';
-  import { wsStore } from './lib/stores/websocket';
+  import Settings from './routes/Settings.svelte';
+  import DefineStep from './lib/components/steps/DefineStep.svelte';
+  import ResearchStep from './lib/components/steps/ResearchStep.svelte';
+  import PlanStep from './lib/components/steps/PlanStep.svelte';
+  import ImplementStep from './lib/components/steps/ImplementStep.svelte';
+  import ReviewStep from './lib/components/steps/ReviewStep.svelte';
+  import ReportStep from './lib/components/steps/ReportStep.svelte';
   import { settingsStore } from './lib/stores/settings';
+  import { workflowStore } from './lib/stores/workflow';
 
-  let currentView: 'dashboard' | 'settings' = 'dashboard';
-
-  $: connected = $wsStore.connected;
   $: settings = $settingsStore;
+  $: workflow = $workflowStore;
+
+  let showSettings = false;
+
+  function toggleSettings() {
+    showSettings = !showSettings;
+  }
+
+  function closeSettings() {
+    showSettings = false;
+  }
 
   // Terminal resize state
   let isResizing = false;
@@ -48,18 +61,28 @@
 </script>
 
 <div class="app" class:resizing={isResizing}>
-  <Sidebar bind:currentView {connected} />
+  <Sidebar {showSettings} onToggleSettings={toggleSettings} onCloseSettings={closeSettings} />
 
   <div class="main-wrapper">
     <main class="main-content">
-      {#if currentView === 'dashboard'}
-        <Dashboard />
-      {:else if currentView === 'settings'}
-        <Settings />
+      {#if showSettings}
+        <Settings on:back={closeSettings} />
+      {:else if workflow.currentStep === 'define'}
+        <DefineStep />
+      {:else if workflow.currentStep === 'research'}
+        <ResearchStep />
+      {:else if workflow.currentStep === 'plan'}
+        <PlanStep />
+      {:else if workflow.currentStep === 'implement'}
+        <ImplementStep />
+      {:else if workflow.currentStep === 'review'}
+        <ReviewStep />
+      {:else if workflow.currentStep === 'report'}
+        <ReportStep />
       {/if}
     </main>
 
-    {#if settings.terminalVisible && currentView !== 'settings'}
+    {#if settings.terminalVisible && workflow.currentStep === 'implement' && !showSettings}
       <div class="terminal-panel" style="height: {terminalHeight}px">
         <Terminal onResizeStart={handleResizeStart} />
       </div>

@@ -1,12 +1,9 @@
 <script lang="ts">
-  import { projectsStore } from '../stores/projects';
-  import ProjectList from './ProjectList.svelte';
-  import CreateProjectModal from './CreateProjectModal.svelte';
+  import WorkflowNav from './WorkflowNav.svelte';
 
-  export let currentView: 'dashboard' | 'settings';
-  export let connected: boolean;
-
-  let showCreateModal = false;
+  export let showSettings: boolean = false;
+  export let onToggleSettings: () => void = () => {};
+  export let onCloseSettings: () => void = () => {};
 </script>
 
 <aside class="sidebar">
@@ -15,60 +12,21 @@
       <h1 class="logo-text" data-text="CodeSkillet"><span class="logo-code">Code</span><span class="logo-skillet">Skillet</span></h1>
       <p class="tagline">"<span class="tagline-let-it">let it</span> <span class="tagline-cook">cook</span>"</p>
     </a>
-    <div class="connection-status" class:connected>
-      <span class="status-dot"></span>
-      <span class="status-text">{connected ? 'Connected' : 'Disconnected'}</span>
-    </div>
   </div>
 
-  <nav class="sidebar-nav">
-    <button
-      class="nav-item"
-      class:active={currentView === 'dashboard'}
-      on:click={() => (currentView = 'dashboard')}
-    >
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="7" height="7" rx="1" />
-        <rect x="14" y="3" width="7" height="7" rx="1" />
-        <rect x="3" y="14" width="7" height="7" rx="1" />
-        <rect x="14" y="14" width="7" height="7" rx="1" />
-      </svg>
-      Dashboard
-    </button>
-    <button
-      class="nav-item"
-      class:active={currentView === 'settings'}
-      on:click={() => (currentView = 'settings')}
-    >
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+  <WorkflowNav onStepClick={onCloseSettings} />
+
+  <div class="sidebar-footer">
+    <button class="settings-btn" class:active={showSettings} on:click={onToggleSettings}>
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="12" cy="12" r="3" />
-        <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
+        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
       </svg>
       Settings
     </button>
-  </nav>
-
-  <div class="sidebar-section">
-    <div class="section-header">
-      <span>Projects</span>
-      <button class="btn-icon" on:click={() => (showCreateModal = true)} title="New Project">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="5" x2="12" y2="19" />
-          <line x1="5" y1="12" x2="19" y2="12" />
-        </svg>
-      </button>
-    </div>
-    <ProjectList />
-  </div>
-
-  <div class="sidebar-footer">
-    <span class="version">v0.1.0</span>
   </div>
 </aside>
 
-{#if showCreateModal}
-  <CreateProjectModal on:close={() => (showCreateModal = false)} />
-{/if}
 
 <style>
   .sidebar {
@@ -126,95 +84,35 @@
     opacity: 0.7;
   }
 
-  .connection-status {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-
-  .connection-status.connected {
-    color: var(--accent-success);
-  }
-
-  .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--accent-error);
-  }
-
-  .connection-status.connected .status-dot {
-    background-color: var(--accent-success);
-  }
-
-  .sidebar-nav {
+  .sidebar-footer {
+    margin-top: auto;
     padding: var(--space-sm);
-    border-bottom: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
   }
 
-  .nav-item {
+  .settings-btn {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
     width: 100%;
     padding: var(--space-sm) var(--space-md);
     border-radius: var(--border-radius);
+    font-size: 13px;
+    font-weight: 500;
     color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
     transition: all 0.15s ease;
   }
 
-  .nav-item:hover {
+  .settings-btn:hover {
     background-color: var(--bg-hover);
     color: var(--text-primary);
   }
 
-  .nav-item.active {
+  .settings-btn.active {
     background-color: var(--bg-tertiary);
     color: var(--accent-primary);
-  }
-
-  .sidebar-section {
-    flex: 1;
-    overflow-y: auto;
-    padding: var(--space-sm);
-  }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-sm);
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  .btn-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-    color: var(--text-muted);
-    transition: all 0.15s ease;
-  }
-
-  .btn-icon:hover {
-    background-color: var(--bg-hover);
-    color: var(--text-primary);
-  }
-
-  .sidebar-footer {
-    padding: var(--space-sm) var(--space-md);
-    border-top: 1px solid var(--border-color);
-  }
-
-  .version {
-    font-size: 11px;
-    color: var(--text-muted);
   }
 </style>

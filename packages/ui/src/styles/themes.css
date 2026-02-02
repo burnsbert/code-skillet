@@ -803,8 +803,8 @@
   background-clip: unset !important;
   -webkit-text-fill-color: #222222 !important;
   color: #222222;
-  text-shadow: none;
-  filter: none;
+  text-shadow: none !important;
+  filter: none !important;
 }
 
 /* Blueprint (15): Technical monospace */
@@ -813,7 +813,7 @@
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  font-size: min(2.4rem, 15cqw) !important;
+  font-size: min(2.3rem, 14cqw) !important;
   white-space: nowrap;
   animation: none;
   background: none !important;
