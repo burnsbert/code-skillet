@@ -1,114 +1,128 @@
-import { readFile, writeFile, mkdir } from 'fs/promises';
+import { readFile, writeFile, mkdir, readdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join, dirname } from 'path';
 import type {
   HotSkilletContext,
-  HotSkilletStage,
-  StageStatus,
+  HotSkilletPhase,
+  PhaseStatus,
   HotSkilletTask,
   ReviewConcern,
-  ResearchFindings,
-  Question,
-  HotSkilletReport,
+  HotSkilletQuestion,
+  HotSkilletLearning,
+  WorkflowImplementFile,
+  WorkflowCodeReviewFile,
+  QuestionsFile,
+  LearningsFile,
 } from '../types.js';
 
 const HOT_SKILLET_DIR = '.hot-skillet';
 
-/**
- * Get the path to the Hot Skillet directory for a project
- */
+// ============================================================================
+// Path Helpers
+// ============================================================================
+
 export function getHotSkilletDir(projectPath: string): string {
   return join(projectPath, HOT_SKILLET_DIR);
 }
 
-/**
- * Get the path to a specific project's Hot Skillet data
- */
-export function getProjectDir(projectPath: string, projectId: string): string {
-  return join(getHotSkilletDir(projectPath), projectId);
+export function getStoryDir(projectPath: string, storyId: string): string {
+  return join(getHotSkilletDir(projectPath), storyId);
 }
 
-/**
- * Get the path to the context.json file
- */
-export function getContextPath(projectPath: string, projectId: string): string {
-  return join(getProjectDir(projectPath, projectId), 'context.json');
+export function getContextPath(projectPath: string, storyId: string): string {
+  return join(getStoryDir(projectPath, storyId), 'context.json');
 }
 
-/**
- * Generate a project ID from story source
- */
-export function generateProjectId(storySource: { type: string; value: string }): string {
-  const timestamp = Date.now();
-  let slug = 'project';
+export function getQuestionsPath(projectPath: string, storyId: string): string {
+  return join(getStoryDir(projectPath, storyId), 'questions.json');
+}
 
+export function getResearchPath(projectPath: string, storyId: string): string {
+  return join(getStoryDir(projectPath, storyId), 'research.md');
+}
+
+export function getPlanPath(projectPath: string, storyId: string): string {
+  return join(getStoryDir(projectPath, storyId), 'plan.md');
+}
+
+export function getWorkflowImplementPath(projectPath: string, storyId: string): string {
+  return join(getStoryDir(projectPath, storyId), 'workflow-implement.json');
+}
+
+export function getWorkflowCodeReviewPath(projectPath: string, storyId: string): string {
+  return join(getStoryDir(projectPath, storyId), 'workflow-code-review.json');
+}
+
+export function getLearningsPath(projectPath: string, storyId: string): string {
+  return join(getStoryDir(projectPath, storyId), 'learnings.json');
+}
+
+// ============================================================================
+// Story ID Generation
+// ============================================================================
+
+export function generateStoryId(storySource: { type: string; value: string }): string {
   if (storySource.type === 'jira') {
-    // Use Jira ticket ID directly
-    slug = storySource.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+    // Use Jira ticket ID directly (e.g., "PROJ-123")
+    return storySource.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
   } else if (storySource.type === 'file') {
     // Extract filename without extension
     const filename = storySource.value.split('/').pop() || 'project';
-    slug = filename.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+    return filename.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
   } else if (storySource.type === 'url') {
     // Try to extract meaningful part from URL
     try {
       const url = new URL(storySource.value);
-      slug = url.pathname.split('/').filter(Boolean).pop() || 'url-project';
-      slug = slug.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+      const slug = url.pathname.split('/').filter(Boolean).pop() || 'url-project';
+      return slug.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
     } catch {
-      slug = 'url-project';
+      return 'url-project';
     }
   } else {
-    // For text, use first few words
+    // For text, use first few words + timestamp
     const words = storySource.value.trim().split(/\s+/).slice(0, 3);
-    slug = words.join('-').replace(/[^a-zA-Z0-9-]/g, '').toLowerCase().substring(0, 30);
+    const slug = words.join('-').replace(/[^a-zA-Z0-9-]/g, '').toLowerCase().substring(0, 30);
+    const timestamp = Date.now();
+    return `${slug}-${timestamp}`;
   }
-
-  return `${slug}-${timestamp}`;
 }
 
-/**
- * Initialize a new Hot Skillet context
- */
+// ============================================================================
+// context.json Operations
+// ============================================================================
+
 export async function initializeContext(
   projectPath: string,
   storySource: { type: 'file' | 'url' | 'jira' | 'text'; value: string },
-  storyContent?: string
+  storyId?: string
 ): Promise<HotSkilletContext> {
-  const projectId = generateProjectId(storySource);
-  const projectDir = getProjectDir(projectPath, projectId);
+  const id = storyId || generateStoryId(storySource);
+  const storyDir = getStoryDir(projectPath, id);
 
   // Create directory structure
-  await mkdir(projectDir, { recursive: true });
+  await mkdir(storyDir, { recursive: true });
 
   const now = new Date().toISOString();
   const context: HotSkilletContext = {
-    projectId,
-    projectPath,
-    stage: 'define',
-    stageStatus: 'in_progress',
+    storyId: id,
     storySource,
-    storyContent,
+    phase: 'define',
+    phaseStatus: 'in_progress',
     createdAt: now,
     updatedAt: now,
   };
 
-  // Write context.json
-  await writeContext(projectPath, projectId, context);
+  await writeContext(projectPath, id, context);
 
-  // Write story.md if we have content
-  if (storyContent) {
-    await writeStoryFile(projectPath, projectId, storyContent);
-  }
+  // Initialize empty files
+  await writeQuestions(projectPath, id, { questions: [] });
+  await writeLearnings(projectPath, id, { learnings: [] });
 
   return context;
 }
 
-/**
- * Read the context file for a project
- */
-export async function readContext(projectPath: string, projectId: string): Promise<HotSkilletContext | null> {
-  const contextPath = getContextPath(projectPath, projectId);
+export async function readContext(projectPath: string, storyId: string): Promise<HotSkilletContext | null> {
+  const contextPath = getContextPath(projectPath, storyId);
 
   if (!existsSync(contextPath)) {
     return null;
@@ -123,254 +137,322 @@ export async function readContext(projectPath: string, projectId: string): Promi
   }
 }
 
-/**
- * Write the context file for a project
- */
 export async function writeContext(
   projectPath: string,
-  projectId: string,
+  storyId: string,
   context: HotSkilletContext
 ): Promise<void> {
-  const contextPath = getContextPath(projectPath, projectId);
-  const projectDir = dirname(contextPath);
+  const contextPath = getContextPath(projectPath, storyId);
+  const storyDir = dirname(contextPath);
 
-  // Ensure directory exists
-  await mkdir(projectDir, { recursive: true });
-
-  // Update timestamp
+  await mkdir(storyDir, { recursive: true });
   context.updatedAt = new Date().toISOString();
-
   await writeFile(contextPath, JSON.stringify(context, null, 2), 'utf-8');
 }
 
-/**
- * Update specific fields in the context
- */
 export async function updateContext(
   projectPath: string,
-  projectId: string,
+  storyId: string,
   updates: Partial<HotSkilletContext>
 ): Promise<HotSkilletContext | null> {
-  const context = await readContext(projectPath, projectId);
+  const context = await readContext(projectPath, storyId);
   if (!context) {
     return null;
   }
 
   const updated = { ...context, ...updates };
-  await writeContext(projectPath, projectId, updated);
+  await writeContext(projectPath, storyId, updated);
   return updated;
 }
 
-/**
- * Update stage and status
- */
-export async function updateStage(
+export async function updatePhase(
   projectPath: string,
-  projectId: string,
-  stage: HotSkilletStage,
-  status: StageStatus
+  storyId: string,
+  phase: HotSkilletPhase,
+  status: PhaseStatus
 ): Promise<HotSkilletContext | null> {
-  return updateContext(projectPath, projectId, { stage, stageStatus: status });
+  return updateContext(projectPath, storyId, { phase, phaseStatus: status });
 }
 
 // ============================================================================
-// Markdown File Operations
+// questions.json Operations
 // ============================================================================
 
-/**
- * Write the story.md file
- */
-export async function writeStoryFile(
-  projectPath: string,
-  projectId: string,
-  content: string
-): Promise<void> {
-  const filePath = join(getProjectDir(projectPath, projectId), 'story.md');
-  await writeFile(filePath, content, 'utf-8');
-}
-
-/**
- * Read the story.md file
- */
-export async function readStoryFile(
-  projectPath: string,
-  projectId: string
-): Promise<string | null> {
-  const filePath = join(getProjectDir(projectPath, projectId), 'story.md');
-  if (!existsSync(filePath)) {
-    return null;
-  }
-  return readFile(filePath, 'utf-8');
-}
-
-/**
- * Write the research.md file
- */
-export async function writeResearchFile(
-  projectPath: string,
-  projectId: string,
-  content: string
-): Promise<void> {
-  const filePath = join(getProjectDir(projectPath, projectId), 'research.md');
-  await writeFile(filePath, content, 'utf-8');
-}
-
-/**
- * Read the research.md file
- */
-export async function readResearchFile(
-  projectPath: string,
-  projectId: string
-): Promise<string | null> {
-  const filePath = join(getProjectDir(projectPath, projectId), 'research.md');
-  if (!existsSync(filePath)) {
-    return null;
-  }
-  return readFile(filePath, 'utf-8');
-}
-
-/**
- * Write the plan.md file
- */
-export async function writePlanFile(
-  projectPath: string,
-  projectId: string,
-  content: string
-): Promise<void> {
-  const filePath = join(getProjectDir(projectPath, projectId), 'plan.md');
-  await writeFile(filePath, content, 'utf-8');
-}
-
-/**
- * Read the plan.md file
- */
-export async function readPlanFile(
-  projectPath: string,
-  projectId: string
-): Promise<string | null> {
-  const filePath = join(getProjectDir(projectPath, projectId), 'plan.md');
-  if (!existsSync(filePath)) {
-    return null;
-  }
-  return readFile(filePath, 'utf-8');
-}
-
-/**
- * Write the tasks.json file
- */
-export async function writeTasksFile(
-  projectPath: string,
-  projectId: string,
-  tasks: HotSkilletTask[]
-): Promise<void> {
-  const filePath = join(getProjectDir(projectPath, projectId), 'tasks.json');
-  await writeFile(filePath, JSON.stringify(tasks, null, 2), 'utf-8');
-}
-
-/**
- * Read the tasks.json file
- */
-export async function readTasksFile(
-  projectPath: string,
-  projectId: string
-): Promise<HotSkilletTask[] | null> {
-  const filePath = join(getProjectDir(projectPath, projectId), 'tasks.json');
-  if (!existsSync(filePath)) {
+export async function readQuestions(projectPath: string, storyId: string): Promise<QuestionsFile | null> {
+  const path = getQuestionsPath(projectPath, storyId);
+  if (!existsSync(path)) {
     return null;
   }
   try {
-    const content = await readFile(filePath, 'utf-8');
-    return JSON.parse(content) as HotSkilletTask[];
+    const content = await readFile(path, 'utf-8');
+    return JSON.parse(content) as QuestionsFile;
   } catch {
     return null;
   }
 }
 
-/**
- * Write the review.md file
- */
-export async function writeReviewFile(
-  projectPath: string,
-  projectId: string,
-  content: string
-): Promise<void> {
-  const filePath = join(getProjectDir(projectPath, projectId), 'review.md');
-  await writeFile(filePath, content, 'utf-8');
+export async function writeQuestions(projectPath: string, storyId: string, data: QuestionsFile): Promise<void> {
+  const path = getQuestionsPath(projectPath, storyId);
+  await writeFile(path, JSON.stringify(data, null, 2), 'utf-8');
 }
 
-/**
- * Read the review.md file
- */
-export async function readReviewFile(
+export async function addQuestion(
   projectPath: string,
-  projectId: string
-): Promise<string | null> {
-  const filePath = join(getProjectDir(projectPath, projectId), 'review.md');
-  if (!existsSync(filePath)) {
+  storyId: string,
+  question: Omit<HotSkilletQuestion, 'id'>
+): Promise<HotSkilletQuestion> {
+  const data = await readQuestions(projectPath, storyId) || { questions: [] };
+  const id = `Q${data.questions.length + 1}`;
+  const newQuestion: HotSkilletQuestion = { id, ...question };
+  data.questions.push(newQuestion);
+  await writeQuestions(projectPath, storyId, data);
+  return newQuestion;
+}
+
+export async function answerQuestion(
+  projectPath: string,
+  storyId: string,
+  questionId: string,
+  answer: string
+): Promise<HotSkilletQuestion | null> {
+  const data = await readQuestions(projectPath, storyId);
+  if (!data) return null;
+
+  const question = data.questions.find(q => q.id === questionId);
+  if (!question) return null;
+
+  question.answer = answer;
+  question.answeredAt = new Date().toISOString();
+  await writeQuestions(projectPath, storyId, data);
+  return question;
+}
+
+// ============================================================================
+// research.md Operations
+// ============================================================================
+
+export async function writeResearch(projectPath: string, storyId: string, content: string): Promise<void> {
+  const path = getResearchPath(projectPath, storyId);
+  await writeFile(path, content, 'utf-8');
+}
+
+export async function readResearch(projectPath: string, storyId: string): Promise<string | null> {
+  const path = getResearchPath(projectPath, storyId);
+  if (!existsSync(path)) {
     return null;
   }
-  return readFile(filePath, 'utf-8');
+  return readFile(path, 'utf-8');
 }
 
-/**
- * Write the report.md file
- */
-export async function writeReportFile(
-  projectPath: string,
-  projectId: string,
-  content: string
-): Promise<void> {
-  const filePath = join(getProjectDir(projectPath, projectId), 'report.md');
-  await writeFile(filePath, content, 'utf-8');
+// ============================================================================
+// plan.md Operations
+// ============================================================================
+
+export async function writePlan(projectPath: string, storyId: string, content: string): Promise<void> {
+  const path = getPlanPath(projectPath, storyId);
+  await writeFile(path, content, 'utf-8');
 }
 
-/**
- * Read the report.md file
- */
-export async function readReportFile(
-  projectPath: string,
-  projectId: string
-): Promise<string | null> {
-  const filePath = join(getProjectDir(projectPath, projectId), 'report.md');
-  if (!existsSync(filePath)) {
+export async function readPlan(projectPath: string, storyId: string): Promise<string | null> {
+  const path = getPlanPath(projectPath, storyId);
+  if (!existsSync(path)) {
     return null;
   }
-  return readFile(filePath, 'utf-8');
+  return readFile(path, 'utf-8');
+}
+
+// ============================================================================
+// workflow-implement.json Operations
+// ============================================================================
+
+export async function readWorkflowImplement(projectPath: string, storyId: string): Promise<WorkflowImplementFile | null> {
+  const path = getWorkflowImplementPath(projectPath, storyId);
+  if (!existsSync(path)) {
+    return null;
+  }
+  try {
+    const content = await readFile(path, 'utf-8');
+    return JSON.parse(content) as WorkflowImplementFile;
+  } catch {
+    return null;
+  }
+}
+
+export async function writeWorkflowImplement(projectPath: string, storyId: string, data: WorkflowImplementFile): Promise<void> {
+  const path = getWorkflowImplementPath(projectPath, storyId);
+  await writeFile(path, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+export async function initializeWorkflowImplement(
+  projectPath: string,
+  storyId: string,
+  tasks: HotSkilletTask[]
+): Promise<WorkflowImplementFile> {
+  const data: WorkflowImplementFile = {
+    activeTask: null,
+    tasks,
+  };
+  await writeWorkflowImplement(projectPath, storyId, data);
+  return data;
+}
+
+export async function updateTask(
+  projectPath: string,
+  storyId: string,
+  taskId: string,
+  updates: Partial<HotSkilletTask>
+): Promise<HotSkilletTask | null> {
+  const data = await readWorkflowImplement(projectPath, storyId);
+  if (!data) return null;
+
+  const task = data.tasks.find(t => t.id === taskId);
+  if (!task) return null;
+
+  Object.assign(task, updates);
+  await writeWorkflowImplement(projectPath, storyId, data);
+  return task;
+}
+
+export async function setActiveTask(
+  projectPath: string,
+  storyId: string,
+  taskId: string | null
+): Promise<void> {
+  const data = await readWorkflowImplement(projectPath, storyId);
+  if (!data) return;
+
+  data.activeTask = taskId;
+  await writeWorkflowImplement(projectPath, storyId, data);
+}
+
+// ============================================================================
+// workflow-code-review.json Operations
+// ============================================================================
+
+export async function readWorkflowCodeReview(projectPath: string, storyId: string): Promise<WorkflowCodeReviewFile | null> {
+  const path = getWorkflowCodeReviewPath(projectPath, storyId);
+  if (!existsSync(path)) {
+    return null;
+  }
+  try {
+    const content = await readFile(path, 'utf-8');
+    return JSON.parse(content) as WorkflowCodeReviewFile;
+  } catch {
+    return null;
+  }
+}
+
+export async function writeWorkflowCodeReview(projectPath: string, storyId: string, data: WorkflowCodeReviewFile): Promise<void> {
+  const path = getWorkflowCodeReviewPath(projectPath, storyId);
+  await writeFile(path, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+export async function initializeWorkflowCodeReview(
+  projectPath: string,
+  storyId: string,
+  concerns: ReviewConcern[]
+): Promise<WorkflowCodeReviewFile> {
+  const data: WorkflowCodeReviewFile = {
+    activeConcern: null,
+    concerns,
+  };
+  await writeWorkflowCodeReview(projectPath, storyId, data);
+  return data;
+}
+
+export async function updateConcern(
+  projectPath: string,
+  storyId: string,
+  concernId: string,
+  updates: Partial<ReviewConcern>
+): Promise<ReviewConcern | null> {
+  const data = await readWorkflowCodeReview(projectPath, storyId);
+  if (!data) return null;
+
+  const concern = data.concerns.find(c => c.id === concernId);
+  if (!concern) return null;
+
+  Object.assign(concern, updates);
+  await writeWorkflowCodeReview(projectPath, storyId, data);
+  return concern;
+}
+
+export async function setActiveConcern(
+  projectPath: string,
+  storyId: string,
+  concernId: string | null
+): Promise<void> {
+  const data = await readWorkflowCodeReview(projectPath, storyId);
+  if (!data) return;
+
+  data.activeConcern = concernId;
+  await writeWorkflowCodeReview(projectPath, storyId, data);
+}
+
+// ============================================================================
+// learnings.json Operations
+// ============================================================================
+
+export async function readLearnings(projectPath: string, storyId: string): Promise<LearningsFile | null> {
+  const path = getLearningsPath(projectPath, storyId);
+  if (!existsSync(path)) {
+    return null;
+  }
+  try {
+    const content = await readFile(path, 'utf-8');
+    return JSON.parse(content) as LearningsFile;
+  } catch {
+    return null;
+  }
+}
+
+export async function writeLearnings(projectPath: string, storyId: string, data: LearningsFile): Promise<void> {
+  const path = getLearningsPath(projectPath, storyId);
+  await writeFile(path, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+export async function addLearning(
+  projectPath: string,
+  storyId: string,
+  learning: Omit<HotSkilletLearning, 'id' | 'capturedAt'>
+): Promise<HotSkilletLearning> {
+  const data = await readLearnings(projectPath, storyId) || { learnings: [] };
+  const id = `L${data.learnings.length + 1}`;
+  const newLearning: HotSkilletLearning = {
+    id,
+    ...learning,
+    capturedAt: new Date().toISOString(),
+  };
+  data.learnings.push(newLearning);
+  await writeLearnings(projectPath, storyId, data);
+  return newLearning;
 }
 
 // ============================================================================
 // Discovery
 // ============================================================================
 
-/**
- * Find all Hot Skillet projects in a directory
- */
-export async function findProjects(projectPath: string): Promise<string[]> {
+export async function findStories(projectPath: string): Promise<string[]> {
   const hsDir = getHotSkilletDir(projectPath);
   if (!existsSync(hsDir)) {
     return [];
   }
 
-  const { readdir } = await import('fs/promises');
   const entries = await readdir(hsDir, { withFileTypes: true });
-
   return entries
     .filter(entry => entry.isDirectory())
     .map(entry => entry.name);
 }
 
-/**
- * Find the most recent active Hot Skillet project
- */
-export async function findActiveProject(projectPath: string): Promise<HotSkilletContext | null> {
-  const projectIds = await findProjects(projectPath);
+export async function findActiveStory(projectPath: string): Promise<HotSkilletContext | null> {
+  const storyIds = await findStories(projectPath);
 
   let mostRecent: HotSkilletContext | null = null;
   let mostRecentTime = 0;
 
-  for (const projectId of projectIds) {
-    const context = await readContext(projectPath, projectId);
-    if (context && context.stage !== 'report') {
+  for (const storyId of storyIds) {
+    const context = await readContext(projectPath, storyId);
+    if (context && context.phase !== 'complete') {
       const time = new Date(context.updatedAt).getTime();
       if (time > mostRecentTime) {
         mostRecentTime = time;

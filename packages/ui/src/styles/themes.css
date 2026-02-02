@@ -278,15 +278,15 @@
 
 /* Theme 8: Crystal Fog (Light - Blue/Classic) */
 [data-theme="8"] {
-  --bg-primary: #c8d0d8;
-  --bg-secondary: #dce4eb;
-  --bg-tertiary: #f5f8fd;
-  --bg-card: #f5f8fd;
-  --bg-hover: #d0dce8;
+  --bg-primary: #c4d0dc;
+  --bg-secondary: #d8e2ef;
+  --bg-tertiary: #f2f6fc;
+  --bg-card: #f2f6fc;
+  --bg-hover: #ccd8ea;
 
-  --text-primary: #2a3540;
-  --text-secondary: #4a5a6a;
-  --text-muted: #5c6d7a;
+  --text-primary: #283848;
+  --text-secondary: #485a70;
+  --text-muted: #5a6d82;
 
   --accent-primary: #4a6fa5;
   --accent-secondary: #6890c0;
@@ -294,12 +294,12 @@
   --accent-warning: #ca8a04;
   --accent-error: #dc2626;
 
-  --border-color: #b8c8d8;
+  --border-color: #b4c6dc;
   --card-hover-border: #4a6fa5;
   --card-hover-shadow: 0 2px 8px rgba(74, 111, 165, 0.15);
-  --card-btn-bg: #d0dce8;
-  --card-btn-border: #b8c8d8;
-  --card-btn-hover: #c0d0e0;
+  --card-btn-bg: #ccd8ea;
+  --card-btn-border: #b4c6dc;
+  --card-btn-hover: #bcd0e4;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -580,6 +580,46 @@
   --link-color: #8b5a2b;
 }
 
+/* Theme 17: Stone Tablet (Light - Slate Blue-Gray) */
+[data-theme="17"] {
+  --bg-primary: #c8ced6;
+  --bg-secondary: #d8dee6;
+  --bg-tertiary: #e8ecf0;
+  --bg-card: #eaeff4;
+  --bg-hover: #d0d6de;
+
+  --text-primary: #3a4048;
+  --text-secondary: #525a65;
+  --text-muted: #6a7280;
+
+  --accent-primary: #5c6b7a;
+  --accent-secondary: #7a8a9c;
+  --accent-success: #4a6878;
+  --accent-warning: #7a6850;
+  --accent-error: #7a5050;
+
+  --border-color: #a8b0b8;
+  --card-hover-border: transparent;
+  --card-hover-shadow: none;
+  --card-btn-bg: #d0d6de;
+  --card-btn-border: #b8c0c8;
+  --card-btn-hover: #c0c8d0;
+
+  --shadow-sm: 0 1px 2px rgba(58, 64, 72, 0.08);
+  --shadow-md: 0 4px 6px rgba(58, 64, 72, 0.12);
+  --shadow-lg: 0 10px 15px rgba(58, 64, 72, 0.18);
+
+  --terminal-bg: #2a2e34;
+  --terminal-text: #d8dee6;
+
+  --logo-gradient-start: #4c5a68;
+  --logo-gradient-mid: #7a8a9c;
+  --logo-gradient-end: #4c5a68;
+  --logo-glow: rgba(92, 107, 122, 0.3);
+
+  --link-color: #5c6b7a;
+}
+
 /* ==========================================
    LOGO ANIMATIONS
    ========================================== */
@@ -740,10 +780,38 @@
     flame-jitter-outer 0.9s steps(2, end) infinite;
 }
 
-/* Family Console (9): No animation */
-[data-theme="9"] .logo-text {
+/* Classic Console (7): Nintendo-style rounded font */
+[data-theme="7"] .logo-text {
+  font-family: 'Lilita One', cursive !important;
+  font-size: min(2.4rem, 14cqw) !important;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
   animation: none;
-  background-size: 100% 100%;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: var(--accent-primary) !important;
+  text-shadow: 
+    3px 3px 0 rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(157, 140, 214, 0.4);
+  filter: none !important;
+}
+
+/* Family Console (9): Nintendo-style rounded font */
+[data-theme="9"] .logo-text {
+  font-family: 'Lilita One', cursive !important;
+  font-size: min(2.4rem, 14cqw) !important;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  animation: none;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: var(--accent-primary) !important;
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+  filter: none !important;
 }
 
 /* Snowy Night (10): Soft glow */
@@ -825,6 +893,24 @@
   filter: none;
 }
 
+/* Stone Tablet (17): Engraved slate effect */
+[data-theme="17"] .logo-text {
+  font-family: 'Arial Black', 'Helvetica Bold', sans-serif !important;
+  font-weight: 900;
+  letter-spacing: 2px;
+  font-size: min(1.85rem, 11cqw) !important;
+  text-transform: uppercase;
+  white-space: nowrap;
+  animation: none;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #5a6370 !important;
+  color: #5a6370;
+  text-shadow: none !important;
+  filter: none;
+}
+
 /* ==========================================
    THEME-SPECIFIC TAGLINE STYLING
    ========================================== */
@@ -875,6 +961,21 @@
   color: #ff6b00;
 }
 
+/* Two Portals (11): Split blue/orange powered by */
+[data-theme="11"] .powered-label {
+  color: #00a2ff !important;
+  opacity: 1 !important;
+}
+
+[data-theme="11"] .hot-skillet {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #ff6b00 !important;
+  background-clip: unset !important;
+  color: #ff6b00 !important;
+  animation: none !important;
+}
+
 /* Wasteland (12): Terminal green */
 [data-theme="12"] .tagline {
   font-family: 'Courier New', monospace !important;
@@ -904,6 +1005,19 @@
   color: rgba(126, 200, 227, 0.8);
 }
 
+/* Stone Tablet (17): Engraved inscription */
+[data-theme="17"] .tagline {
+  font-family: 'Cinzel', 'Times New Roman', serif !important;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-size: 0.6rem;
+  color: #6a7280;
+  text-shadow:
+    1px 1px 0 rgba(255, 255, 255, 0.7),
+    -0.5px -0.5px 0 rgba(58, 64, 72, 0.2);
+}
+
 /* ==========================================
    THEME-SPECIFIC BACKGROUND PATTERNS
    ========================================== */
@@ -926,6 +1040,11 @@
     var(--bg-primary);
   background-size: 20px 20px, 20px 20px, auto;
   background-attachment: fixed;
+}
+
+/* Stone Tablet (17): Solid background (no texture) */
+[data-theme="17"] body {
+  background: var(--bg-primary);
 }
 
 /* Wasteland (12): Scanline overlay */
@@ -1105,4 +1224,556 @@
 [data-theme="16"] .kanban-column {
   background: rgba(255, 248, 240, 0.5);
   border: 1px solid rgba(139, 90, 43, 0.1);
+}
+
+/* Stone Tablet (17): Engraved slate appearance */
+[data-theme="17"] .task-card {
+  /* No transitions - stone blocks are solid */
+  transition: none !important;
+  /* Stone block - raised from surface */
+  background:
+    /* Stone grain texture */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E"),
+    linear-gradient(145deg, #e4e9ef 0%, #d8dde5 50%, #ccd2dc 100%);
+  background-size: 120px 120px, 100% 100%;
+  /* Chiseled stone block edges */
+  border: none;
+  border-top: 2px solid rgba(255, 255, 255, 0.7);
+  border-left: 2px solid rgba(255, 255, 255, 0.5);
+  border-right: 2px solid rgba(90, 100, 115, 0.4);
+  border-bottom: 2px solid rgba(90, 100, 115, 0.5);
+  border-radius: 2px !important;
+  /* Stone block sitting on surface - drop shadow */
+  box-shadow:
+    3px 3px 6px rgba(60, 68, 80, 0.35),
+    1px 1px 2px rgba(60, 68, 80, 0.25),
+    /* Subtle inner highlight on top edge */
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="17"] .task-card:hover,
+[data-theme="17"] .task-card:focus,
+[data-theme="17"] .task-card:active {
+  /* Identical to non-hover - no visual change */
+  transform: none !important;
+  border-top-color: rgba(255, 255, 255, 0.7) !important;
+  border-left-color: rgba(255, 255, 255, 0.5) !important;
+  border-right-color: rgba(90, 100, 115, 0.4) !important;
+  border-bottom-color: rgba(90, 100, 115, 0.5) !important;
+  box-shadow:
+    3px 3px 6px rgba(60, 68, 80, 0.35),
+    1px 1px 2px rgba(60, 68, 80, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+}
+
+[data-theme="17"] .task-title {
+  color: #444a52;
+  /* Subtle engraved text */
+  text-shadow:
+    0.5px 0.5px 0 rgba(255, 255, 255, 0.7),
+    -0.5px -0.5px 0 rgba(60, 68, 80, 0.15);
+}
+
+[data-theme="17"] .kanban-column {
+  background:
+    /* Stone texture */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.1'/%3E%3C/svg%3E"),
+    linear-gradient(170deg, #d8dee8 0%, #ccd4de 50%, #c4ccd8 100%);
+  background-size: 180px 180px, 100% 100%;
+  /* Chiseled stone slab edges */
+  border: none;
+  border-top: 3px solid rgba(255, 255, 255, 0.6);
+  border-left: 3px solid rgba(255, 255, 255, 0.4);
+  border-right: 3px solid rgba(100, 110, 125, 0.35);
+  border-bottom: 3px solid rgba(100, 110, 125, 0.45);
+  border-radius: 3px !important;
+  /* Stone slab drop shadow */
+  box-shadow:
+    4px 5px 12px rgba(70, 80, 95, 0.25),
+    2px 2px 4px rgba(70, 80, 95, 0.2);
+}
+
+[data-theme="17"] .column-header {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 10px;
+  color: #525a65;
+  text-shadow: 0.5px 0.5px 0 rgba(255, 255, 255, 0.7);
+}
+
+[data-theme="17"] .btn,
+[data-theme="17"] button {
+  border-radius: 1px;
+  box-shadow:
+    inset 1px 1px 2px rgba(255, 255, 255, 0.5),
+    inset -1px -1px 2px rgba(58, 64, 72, 0.08);
+}
+
+/* ==========================================
+   ACTIVE TASK STYLING (per theme)
+   ========================================== */
+
+/* Default/Blue Notes (1): Pulsing orange glow */
+:root .task-card.active,
+[data-theme="1"] .task-card.active {
+  border: 2px solid var(--accent-primary) !important;
+  animation: active-pulse-orange 2s ease-in-out infinite !important;
+}
+
+@keyframes active-pulse-orange {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(234, 88, 12, 0.4),
+                0 0 16px rgba(234, 88, 12, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(234, 88, 12, 0.7),
+                0 0 40px rgba(234, 88, 12, 0.4);
+  }
+}
+
+/* Blockland (2): Pixelated flashing selection */
+[data-theme="2"] .task-card.active {
+  box-shadow:
+    6px 6px 0 0 #1a2618,
+    inset 0 0 0 2px rgba(124, 189, 107, 0.3) !important;
+  animation: blockland-flash 0.8s steps(1) infinite !important;
+}
+
+@keyframes blockland-flash {
+  0%, 100% {
+    border: 3px solid #7cbd6b;
+    background: #686868;
+  }
+  50% {
+    border: 3px solid #cddc39;
+    background: #5a6a4a;
+  }
+}
+
+/* Talking Car (3): KITT scanner red pulse */
+[data-theme="3"] .task-card.active {
+  border: 2px solid #ff0808 !important;
+  animation: kitt-card-pulse 2s ease-in-out infinite !important;
+}
+
+@keyframes kitt-card-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6),
+                0 0 30px rgba(255, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.9),
+                0 0 60px rgba(255, 0, 0, 0.5);
+  }
+}
+
+/* Amethyst Dusk (4): Purple crystal shimmer */
+[data-theme="4"] .task-card.active {
+  border: 2px solid #a78bfa !important;
+  animation: amethyst-shimmer 2.5s ease-in-out infinite !important;
+}
+
+@keyframes amethyst-shimmer {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(167, 139, 250, 0.4),
+                0 0 20px rgba(139, 92, 246, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(167, 139, 250, 0.8),
+                0 0 48px rgba(139, 92, 246, 0.5);
+  }
+}
+
+/* Warm Sand (5): Warm terracotta pulse */
+[data-theme="5"] .task-card.active {
+  border: 2px solid #c2410c !important;
+  animation: warm-sand-pulse 2.5s ease-in-out infinite !important;
+}
+
+@keyframes warm-sand-pulse {
+  0%, 100% {
+    background-color: #fff5f0;
+    box-shadow: 0 0 6px rgba(194, 65, 12, 0.25),
+                0 3px 10px rgba(194, 65, 12, 0.15);
+  }
+  50% {
+    background-color: #ffede0;
+    box-shadow: 0 0 16px rgba(194, 65, 12, 0.5),
+                0 4px 20px rgba(194, 65, 12, 0.3);
+  }
+}
+
+/* Ember Glow (6): Flickering flame - Let It Cook */
+[data-theme="6"] .task-card.active {
+  border: 2px solid #f97316 !important;
+  animation: ember-card-flicker 3s ease-in-out infinite !important;
+}
+
+@keyframes ember-card-flicker {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(249, 115, 22, 0.5),
+                0 0 24px rgba(220, 38, 38, 0.3);
+  }
+  33% {
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.7),
+                0 0 40px rgba(220, 38, 38, 0.4);
+  }
+  66% {
+    box-shadow: 0 0 16px rgba(249, 115, 22, 0.55),
+                0 0 32px rgba(220, 38, 38, 0.35);
+  }
+}
+
+/* Classic Console (7): Retro purple blink */
+[data-theme="7"] .task-card.active {
+  border: 2px solid #9d8cd6 !important;
+  animation: console-blink 2s ease-in-out infinite !important;
+}
+
+@keyframes console-blink {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(157, 140, 214, 0.4),
+                inset 0 0 6px rgba(157, 140, 214, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(157, 140, 214, 0.8),
+                inset 0 0 12px rgba(157, 140, 214, 0.25);
+  }
+}
+
+/* Crystal Fog (8): Soft blue breathing */
+[data-theme="8"] .task-card.active {
+  border: 2px solid #4a6fa5 !important;
+  animation: crystal-breathe 2.5s ease-in-out infinite !important;
+}
+
+@keyframes crystal-breathe {
+  0%, 100% {
+    background-color: #eef4fa;
+    box-shadow: 0 0 6px rgba(74, 111, 165, 0.25),
+                0 3px 10px rgba(74, 111, 165, 0.12);
+  }
+  50% {
+    background-color: #e0ecf8;
+    box-shadow: 0 0 16px rgba(74, 111, 165, 0.5),
+                0 5px 20px rgba(74, 111, 165, 0.3);
+  }
+}
+
+/* Family Console (9): Retro selection blink */
+[data-theme="9"] .task-card.active {
+  border: 2px solid #6b5b95 !important;
+  animation: family-blink 2s ease-in-out infinite !important;
+}
+
+@keyframes family-blink {
+  0%, 100% {
+    background-color: #dcdce8;
+    box-shadow: 0 0 6px rgba(107, 91, 149, 0.3);
+  }
+  50% {
+    background-color: #d0d0e0;
+    box-shadow: 0 0 14px rgba(107, 91, 149, 0.5);
+  }
+}
+
+/* Snowy Night (10): Icy sparkle shimmer */
+[data-theme="10"] .task-card.active {
+  border: 2px solid #a8d4ff !important;
+  animation: snowy-sparkle 2.5s ease-in-out infinite !important;
+}
+
+@keyframes snowy-sparkle {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(168, 212, 255, 0.5),
+                0 0 24px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(168, 212, 255, 0.8),
+                0 0 48px rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* Two Portals (11): Dual blue/orange portal glow alternating */
+[data-theme="11"] .task-card.active {
+  border: 2px solid #00a2ff !important;
+  animation: portal-card-pulse 2s ease-in-out infinite !important;
+}
+
+@keyframes portal-card-pulse {
+  0%, 100% {
+    border-color: #00a2ff;
+    box-shadow: 0 0 20px rgba(0, 162, 255, 0.7),
+                0 0 40px rgba(0, 162, 255, 0.3);
+  }
+  50% {
+    border-color: #ff6b00;
+    box-shadow: 0 0 20px rgba(255, 107, 0, 0.7),
+                0 0 40px rgba(255, 107, 0, 0.3);
+  }
+}
+
+/* Wasteland (12): Terminal green with scanlines */
+[data-theme="12"] .task-card.active {
+  border: 2px solid #14ff00 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  animation: terminal-card-glow 2.5s ease-in-out infinite !important;
+}
+
+@keyframes terminal-card-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(20, 255, 0, 0.5),
+                0 0 20px rgba(20, 255, 0, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(20, 255, 0, 0.8),
+                0 0 40px rgba(20, 255, 0, 0.45);
+  }
+}
+
+/* First interference band - upper region */
+[data-theme="12"] .task-card.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(20, 255, 0, 0.45) 0px,
+    rgba(20, 255, 0, 0.45) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0,0,0,1) 0%,
+    rgba(0,0,0,0.8) 35%,
+    rgba(0,0,0,0.3) 55%,
+    rgba(0,0,0,0) 75%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0,0,0,1) 0%,
+    rgba(0,0,0,0.8) 35%,
+    rgba(0,0,0,0.3) 55%,
+    rgba(0,0,0,0) 75%
+  );
+  pointer-events: none;
+  animation: scanlines-wobble-a 4s linear infinite;
+  z-index: 1;
+}
+
+/* Second interference band - lower region */
+[data-theme="12"] .task-card.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(20, 255, 0, 0.45) 0px,
+    rgba(20, 255, 0, 0.45) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 25%,
+    rgba(0,0,0,0.3) 45%,
+    rgba(0,0,0,0.8) 65%,
+    rgba(0,0,0,1) 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 25%,
+    rgba(0,0,0,0.3) 45%,
+    rgba(0,0,0,0.8) 65%,
+    rgba(0,0,0,1) 100%
+  );
+  pointer-events: none;
+  animation: scanlines-wobble-b 5s linear infinite;
+  z-index: 2;
+}
+
+@keyframes scanlines-wobble-a {
+  0% { opacity: 0.1; }
+  5% { opacity: 0.4; }
+  10% { opacity: 0.25; }
+  /* Wobbly plateau */
+  15% { opacity: 0.85; }
+  20% { opacity: 0.5; }
+  25% { opacity: 0.95; }
+  30% { opacity: 0.55; }
+  35% { opacity: 0.9; }
+  40% { opacity: 0.6; }
+  45% { opacity: 0.95; }
+  50% { opacity: 0.5; }
+  55% { opacity: 0.85; }
+  60% { opacity: 0.6; }
+  65% { opacity: 0.5; }
+  /* Fade out */
+  75% { opacity: 0.4; }
+  85% { opacity: 0.25; }
+  100% { opacity: 0.1; }
+}
+
+@keyframes scanlines-wobble-b {
+  0% { opacity: 0.5; }
+  8% { opacity: 0.2; }
+  /* Wobbly plateau */
+  15% { opacity: 0.8; }
+  22% { opacity: 0.45; }
+  29% { opacity: 0.9; }
+  36% { opacity: 0.5; }
+  43% { opacity: 0.95; }
+  50% { opacity: 0.55; }
+  57% { opacity: 0.85; }
+  64% { opacity: 0.6; }
+  71% { opacity: 0.5; }
+  78% { opacity: 0.8; }
+  /* Fade */
+  88% { opacity: 0.35; }
+  100% { opacity: 0.5; }
+}
+
+/* Whiteboard Post-Its (14): Pinned post-it with pulsing star */
+[data-theme="14"] .task-card.active {
+  border: none !important;
+  z-index: 20 !important;
+  animation: postit-glow 2s ease-in-out infinite !important;
+}
+
+@keyframes postit-glow {
+  0%, 100% {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25),
+                0 0 0 3px #e53935;
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+                0 0 0 4px #ff5252;
+  }
+}
+
+[data-theme="14"] .task-card.active::before {
+  content: '⭐';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 20px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+  animation: star-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes star-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Blueprint (15): Technical selection with scanning line */
+[data-theme="15"] .task-card.active {
+  border: 2px solid #ffffff !important;
+  position: relative !important;
+  overflow: hidden !important;
+  animation: blueprint-glow 2.5s ease-in-out infinite !important;
+}
+
+@keyframes blueprint-glow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(126, 200, 227, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(126, 200, 227, 0.8);
+  }
+}
+
+[data-theme="15"] .task-card.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(126, 200, 227, 0.3), transparent);
+  pointer-events: none;
+  animation: blueprint-scan 2.5s linear infinite;
+}
+
+@keyframes blueprint-scan {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Coffee Shop (16): Warm steaming glow */
+[data-theme="16"] .task-card.active {
+  border: 2px solid #8b5a2b !important;
+  animation: coffee-steam 2.5s ease-in-out infinite !important;
+}
+
+@keyframes coffee-steam {
+  0%, 100% {
+    background-color: #fff0e6;
+    box-shadow: 0 0 8px rgba(139, 90, 43, 0.25),
+                0 3px 10px rgba(139, 90, 43, 0.15);
+  }
+  50% {
+    background-color: #ffe8d6;
+    box-shadow: 0 0 18px rgba(139, 90, 43, 0.5),
+                0 5px 20px rgba(139, 90, 43, 0.35);
+  }
+}
+
+/* Stone Tablet (17): Throbbing active task */
+[data-theme="17"] .task-card.active {
+  position: relative !important;
+  /* Same stone block styling */
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E"),
+    linear-gradient(145deg, #dce2ea 0%, #d0d6e0 50%, #c4cad6 100%) !important;
+  background-size: 120px 120px, 100% 100% !important;
+  border: none !important;
+  border-top: 2px solid rgba(255, 255, 255, 0.7) !important;
+  border-left: 2px solid rgba(255, 255, 255, 0.5) !important;
+  border-right: 2px solid rgba(90, 100, 115, 0.4) !important;
+  border-bottom: 2px solid rgba(90, 100, 115, 0.5) !important;
+  box-shadow:
+    3px 3px 6px rgba(60, 68, 80, 0.35),
+    1px 1px 2px rgba(60, 68, 80, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+}
+
+@keyframes stone-throb {
+  0%, 100% {
+    background-color: rgba(200, 210, 225, 0);
+  }
+  50% {
+    background-color: rgba(180, 195, 220, 0.4);
+  }
+}
+
+/* Throbbing color overlay for active task */
+[data-theme="17"] .task-card.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 2px;
+  pointer-events: none;
+  background-color: rgba(130, 160, 200, 0);
+  animation: stone-throb 2.5s ease-in-out infinite;
 }

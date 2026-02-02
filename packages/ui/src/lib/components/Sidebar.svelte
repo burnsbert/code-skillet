@@ -16,6 +16,11 @@
 
   <WorkflowNav onStepClick={onCloseSettings} />
 
+  <div class="powered-by">
+    <span class="powered-label">Powered by</span>
+    <span class="hot-skillet">Hot Skillet</span>
+  </div>
+
   <div class="sidebar-footer">
     <button class="settings-btn" class:active={showSettings} on:click={onToggleSettings}>
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
@@ -84,10 +89,32 @@
     opacity: 0.7;
   }
 
-  .sidebar-footer {
+  .powered-by {
     margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: var(--space-sm) var(--space-md);
+    font-size: 11px;
+  }
+
+  .sidebar-footer {
     padding: var(--space-sm);
     border-top: 1px solid var(--border-color);
+  }
+
+  .powered-label {
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+
+  .hot-skillet {
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--logo-gradient-start), var(--logo-gradient-mid));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .settings-btn {

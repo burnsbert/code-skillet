@@ -124,6 +124,7 @@ export interface HotSkilletTask {
   completedAt?: string;
   retryCount?: number;
   blockedReason?: string;
+  unblockGuidance?: string; // User guidance when unblocking a task
 }
 
 export interface ReviewConcern {
@@ -167,6 +168,7 @@ export interface HotSkilletContext {
   tasks?: HotSkilletTask[];
   concerns?: ReviewConcern[];
   report?: HotSkilletReport;
+  planRejectionFeedback?: string; // User feedback when plan is rejected
   createdAt: string;
   updatedAt: string;
 }

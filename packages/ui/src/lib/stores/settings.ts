@@ -1,6 +1,6 @@
 import { writable, get } from 'svelte/store';
 
-export type Theme = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '14' | '15' | '16';
+export type Theme = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '14' | '15' | '16' | '17';
 
 export interface ThemeInfo {
   id: Theme;
@@ -17,9 +17,10 @@ export const THEMES: ThemeInfo[] = [
   { id: '1', name: 'Blue Notes', type: 'Dark', preview: ['#1a1a2e', '#16213e', '#ea580c'] },
   { id: '7', name: 'Classic Console', type: 'Dark', preview: ['#1a1a24', '#2d2d3d', '#9d8cd6'] },
   { id: '16', name: 'Coffee Shop', type: 'Light', preview: ['#f5f0e6', '#ebe4d6', '#8b5a2b'] },
-  { id: '8', name: 'Crystal Fog', type: 'Light', preview: ['#c8d0d8', '#dce4eb', '#4a6fa5'] },
+  { id: '8', name: 'Crystal Fog', type: 'Light', preview: ['#c4d0dc', '#d8e2ef', '#4a6fa5'] },
   { id: '9', name: 'Family Console', type: 'Light', preview: ['#a8a8b8', '#c8c8d4', '#6b5b95'] },
   { id: '10', name: 'Snowy Night', type: 'Dark', preview: ['#0a0c10', '#12151a', '#a8d4ff'] },
+  { id: '17', name: 'Stone Tablet', type: 'Light', preview: ['#c8ced6', '#d8dee6', '#5c6b7a'] },
   { id: '3', name: 'Talking Car', type: 'Dark', preview: ['#0a0a0a', '#1a1a1a', '#ff1a1a'] },
   { id: '11', name: 'Two Portals', type: 'Dark', preview: ['#0d0d0d', '#1a1a1a', '#ff6b00'] },
   { id: '5', name: 'Warm Sand', type: 'Light', preview: ['#c9c0b0', '#ddd6c6', '#c2410c'] },

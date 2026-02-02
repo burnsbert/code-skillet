@@ -50,14 +50,14 @@ export type ServerMessage =
   | { type: 'session:error'; message: string }
   | { type: 'session:status'; status: SessionStatus; projectPath: string | null }
 // Hot Skillet server messages
-| { type: 'hot-skillet:stage-update'; projectId: string; stage: HotSkilletStage; status: StageStatus }
-| { type: 'hot-skillet:research-complete'; projectId: string; findings: ResearchFindings }
-| { type: 'hot-skillet:questions-ready'; projectId: string; questions: Question[] }
-| { type: 'hot-skillet:plan-ready'; projectId: string; plan: string; tasks: HotSkilletTask[] }
-| { type: 'hot-skillet:task-update'; projectId: string; taskId: string; status: HotSkilletTaskStatus }
-| { type: 'hot-skillet:concern-update'; projectId: string; concernId: string; status: ConcernStatus }
-| { type: 'hot-skillet:review-complete'; projectId: string; concerns: ReviewConcern[] }
-| { type: 'hot-skillet:report-ready'; projectId: string; report: HotSkilletReport; prUrl?: string };
+| { type: 'hot-skillet:phase-update'; storyId: string; phase: HotSkilletPhase; status: PhaseStatus }
+| { type: 'hot-skillet:research-complete'; storyId: string }
+| { type: 'hot-skillet:questions-ready'; storyId: string; questions: HotSkilletQuestion[] }
+| { type: 'hot-skillet:plan-ready'; storyId: string; tasks: HotSkilletTask[] }
+| { type: 'hot-skillet:task-update'; storyId: string; taskId: string; status: HotSkilletTaskStatus }
+| { type: 'hot-skillet:concern-update'; storyId: string; concernId: string; status: ConcernStatus }
+| { type: 'hot-skillet:review-complete'; storyId: string; concerns: ReviewConcern[] }
+| { type: 'hot-skillet:complete'; storyId: string; report: HotSkilletReport; prUrl?: string };
 
 // Session status type
 export type SessionStatus = 'idle' | 'starting' | 'running' | 'stopped' | 'crashed';
@@ -66,40 +66,46 @@ export type SessionStatus = 'idle' | 'starting' | 'running' | 'stopped' | 'crash
 // Hot Skillet Types
 // ============================================================================
 
-export type HotSkilletStage = 'define' | 'research' | 'plan' | 'implement' | 'review' | 'report';
+// Phases (renamed from stages)
+export type HotSkilletPhase = 'define' | 'research' | 'plan' | 'implement' | 'review' | 'complete';
 
-export type StageStatus = 'pending' | 'in_progress' | 'waiting_user' | 'complete';
+export type PhaseStatus = 'pending' | 'in_progress' | 'waiting_user' | 'complete';
 
+// Task status for workflow-implement.json
 export type HotSkilletTaskStatus = 'pending' | 'in_progress' | 'verifying' | 'complete' | 'blocked';
 
+// Concern status for workflow-code-review.json
 export type ConcernStatus = 'pending' | 'investigating' | 'fixed' | 'dismissed';
 
 export type ConcernSeverity = 'bug' | 'critical' | 'important' | 'minor';
 
-export interface Question {
-  id: string;
+// Learning categories for learnings.json
+export type LearningCategory = 'pattern' | 'gotcha' | 'bug' | 'decision' | 'tip';
+
+// ============================================================================
+// questions.json - Questions & answers tied to phases
+// ============================================================================
+
+export interface HotSkilletQuestion {
+  id: string; // Q1, Q2, Q3...
+  phase: HotSkilletPhase;
   question: string;
   context?: string;
   answer?: string;
+  answeredAt?: string;
 }
 
-export interface ResearchFindings {
-  storyType: 'fe-only' | 'be-only' | 'full-stack' | 'bug-fix';
-  summary: string;
-  patterns: Array<{
-    name: string;
-    file: string;
-    description: string;
-  }>;
-  testCoverage: {
-    typesWithTests: string[];
-    typesWithoutTests: string[];
-  };
-  unansweredQuestions: Question[];
+export interface QuestionsFile {
+  questions: HotSkilletQuestion[];
 }
+
+// ============================================================================
+// workflow-implement.json - Implementation tasks
+// ============================================================================
 
 export interface HotSkilletTask {
-  id: string;
+  id: string; // A1, A2, B1, B2... (section letter + task number)
+  section: string; // A, B, C... (maps to plan.md sections)
   title: string;
   description: string;
   difficulty: number; // 1-10
@@ -109,10 +115,20 @@ export interface HotSkilletTask {
   completedAt?: string;
   retryCount?: number;
   blockedReason?: string;
+  unblockGuidance?: string;
 }
 
+export interface WorkflowImplementFile {
+  activeTask: string | null; // e.g., "B2"
+  tasks: HotSkilletTask[];
+}
+
+// ============================================================================
+// workflow-code-review.json - Review concerns
+// ============================================================================
+
 export interface ReviewConcern {
-  id: string;
+  id: string; // CR-1, CR-2, CR-3...
   title: string;
   severity: ConcernSeverity;
   status: ConcernStatus;
@@ -122,6 +138,55 @@ export interface ReviewConcern {
   suggestedFix?: string;
   resolution?: string;
 }
+
+export interface WorkflowCodeReviewFile {
+  activeConcern: string | null; // e.g., "CR-2"
+  concerns: ReviewConcern[];
+}
+
+// ============================================================================
+// learnings.json - Insights captured during the project
+// ============================================================================
+
+export interface HotSkilletLearning {
+  id: string; // L1, L2, L3...
+  phase: HotSkilletPhase;
+  category: LearningCategory;
+  title: string;
+  description: string;
+  files?: string[];
+  capturedAt: string;
+}
+
+export interface LearningsFile {
+  learnings: HotSkilletLearning[];
+}
+
+// ============================================================================
+// context.json - Project metadata and current phase
+// ============================================================================
+
+export interface HotSkilletContext {
+  storyId: string;
+  storySource: {
+    type: 'file' | 'url' | 'jira' | 'text';
+    value: string;
+  };
+  phase: HotSkilletPhase;
+  phaseStatus: PhaseStatus;
+  branch?: string;
+  baseBranch?: string;
+  planApproved?: boolean;
+  planApprovedAt?: string;
+  planRejectionFeedback?: string;
+  prUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ============================================================================
+// Legacy types for backward compatibility (used by UI dashboard)
+// ============================================================================
 
 export interface HotSkilletReport {
   summary: string;
@@ -134,26 +199,19 @@ export interface HotSkilletReport {
   commitMessage?: string;
 }
 
-export interface HotSkilletContext {
-  projectId: string;
-  projectPath: string;
-  stage: HotSkilletStage;
-  stageStatus: StageStatus;
-  storySource: {
-    type: 'file' | 'url' | 'jira' | 'text';
-    value: string;
+// Kept for research.md parsing (not a separate file anymore)
+export interface ResearchFindings {
+  storyType: 'fe-only' | 'be-only' | 'full-stack' | 'bug-fix';
+  summary: string;
+  patterns: Array<{
+    name: string;
+    file: string;
+    description: string;
+  }>;
+  testCoverage: {
+    typesWithTests: string[];
+    typesWithoutTests: string[];
   };
-  storyContent?: string;
-  branch?: string;
-  baseBranch?: string;
-  research?: ResearchFindings;
-  questions?: Question[];
-  plan?: string;
-  tasks?: HotSkilletTask[];
-  concerns?: ReviewConcern[];
-  report?: HotSkilletReport;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export type ClientMessage =
@@ -170,9 +228,9 @@ export type ClientMessage =
   | { type: 'session:start'; projectPath: string; skipPermissions: boolean; cols?: number; rows?: number }
   | { type: 'session:stop' }
   // Hot Skillet client messages
-  | { type: 'hot-skillet:answer-questions'; projectId: string; answers: Record<string, string> }
-  | { type: 'hot-skillet:plan-approve'; projectId: string }
-  | { type: 'hot-skillet:plan-edit'; projectId: string; content: string }
-  | { type: 'hot-skillet:plan-reject'; projectId: string; feedback: string }
-  | { type: 'hot-skillet:unblock-task'; projectId: string; taskId: string; guidance: string }
-  | { type: 'hot-skillet:create-pr'; projectId: string };
+  | { type: 'hot-skillet:answer-questions'; storyId: string; answers: Record<string, string> }
+  | { type: 'hot-skillet:plan-approve'; storyId: string }
+  | { type: 'hot-skillet:plan-edit'; storyId: string; content: string }
+  | { type: 'hot-skillet:plan-reject'; storyId: string; feedback: string }
+  | { type: 'hot-skillet:unblock-task'; storyId: string; taskId: string; guidance: string }
+  | { type: 'hot-skillet:create-pr'; storyId: string };

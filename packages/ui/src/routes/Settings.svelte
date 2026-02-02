@@ -1,10 +1,13 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { settingsStore, THEMES } from '../lib/stores/settings';
+  import ThemePreviewModal from '../lib/components/ThemePreviewModal.svelte';
 
   const dispatch = createEventDispatcher<{ back: void }>();
 
   $: settings = $settingsStore;
+
+  let showPreview = false;
 
   function handleBack() {
     dispatch('back');
@@ -43,6 +46,13 @@
             </button>
           {/each}
         </div>
+        <button class="preview-link" on:click={() => showPreview = true}>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          Preview theme with sample tasks
+        </button>
       </div>
     </section>
 
@@ -143,6 +153,8 @@
   </footer>
 </div>
 
+<ThemePreviewModal bind:open={showPreview} on:close={() => showPreview = false} />
+
 <style>
   .settings {
     display: flex;
@@ -214,7 +226,7 @@
   /* Theme Grid */
   .theme-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-md);
   }
 
@@ -264,6 +276,28 @@
   .theme-option.active .theme-name {
     color: var(--text-primary);
     font-weight: 600;
+  }
+
+  .preview-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+    padding: var(--space-xs) 0;
+    font-size: 13px;
+    color: var(--link-color, var(--accent-primary));
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .preview-link:hover {
+    color: var(--text-primary);
+  }
+
+  .preview-link svg {
+    opacity: 0.8;
   }
 
   /* Toggle */
