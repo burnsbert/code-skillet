@@ -76,3 +76,118 @@ export const PHASE_LABELS: Record<TaskPhase, string> = {
 };
 
 export const PHASE_ORDER: TaskPhase[] = ['planned', 'in_progress', 'verifying', 'done', 'learnings'];
+
+// ============================================================================
+// Hot Skillet Types
+// ============================================================================
+
+export type HotSkilletStage = 'define' | 'research' | 'plan' | 'implement' | 'review' | 'report';
+
+export type StageStatus = 'pending' | 'in_progress' | 'waiting_user' | 'complete';
+
+export type HotSkilletTaskStatus = 'pending' | 'in_progress' | 'verifying' | 'complete' | 'blocked';
+
+export type ConcernStatus = 'pending' | 'investigating' | 'fixed' | 'dismissed';
+
+export type ConcernSeverity = 'bug' | 'critical' | 'important' | 'minor';
+
+export interface Question {
+  id: string;
+  question: string;
+  context?: string;
+  answer?: string;
+}
+
+export interface ResearchFindings {
+  storyType: 'fe-only' | 'be-only' | 'full-stack' | 'bug-fix';
+  summary: string;
+  patterns: Array<{
+    name: string;
+    file: string;
+    description: string;
+  }>;
+  testCoverage: {
+    typesWithTests: string[];
+    typesWithoutTests: string[];
+  };
+  unansweredQuestions: Question[];
+}
+
+export interface HotSkilletTask {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: number; // 1-10
+  status: HotSkilletTaskStatus;
+  agent?: string;
+  startedAt?: string;
+  completedAt?: string;
+  retryCount?: number;
+  blockedReason?: string;
+}
+
+export interface ReviewConcern {
+  id: string;
+  title: string;
+  severity: ConcernSeverity;
+  status: ConcernStatus;
+  file: string;
+  line?: number;
+  description: string;
+  suggestedFix?: string;
+  resolution?: string;
+}
+
+export interface HotSkilletReport {
+  summary: string;
+  tasksCompleted: number;
+  tasksFailed: number;
+  concernsFixed: number;
+  concernsDismissed: number;
+  filesChanged: number;
+  testsPassed: boolean;
+  commitMessage?: string;
+}
+
+export interface HotSkilletContext {
+  projectId: string;
+  projectPath: string;
+  stage: HotSkilletStage;
+  stageStatus: StageStatus;
+  storySource: {
+    type: 'file' | 'url' | 'jira' | 'text';
+    value: string;
+  };
+  storyContent?: string;
+  branch?: string;
+  baseBranch?: string;
+  research?: ResearchFindings;
+  questions?: Question[];
+  plan?: string;
+  tasks?: HotSkilletTask[];
+  concerns?: ReviewConcern[];
+  report?: HotSkilletReport;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Hot Skillet Task Phase Labels (for Kanban)
+export const HS_TASK_STATUS_LABELS: Record<HotSkilletTaskStatus, string> = {
+  pending: 'Pending',
+  in_progress: 'In Progress',
+  verifying: 'Verifying',
+  complete: 'Complete',
+  blocked: 'Blocked',
+};
+
+export const HS_TASK_STATUS_ORDER: HotSkilletTaskStatus[] = ['pending', 'in_progress', 'verifying', 'complete', 'blocked'];
+
+// Hot Skillet Concern Status Labels (for Review Kanban)
+export const HS_CONCERN_STATUS_LABELS: Record<ConcernStatus, string> = {
+  pending: 'Pending',
+  investigating: 'Investigating',
+  fixed: 'Fixed',
+  dismissed: 'Dismissed',
+};
+
+export const HS_CONCERN_STATUS_ORDER: ConcernStatus[] = ['pending', 'investigating', 'fixed', 'dismissed'];
