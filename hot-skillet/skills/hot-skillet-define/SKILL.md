@@ -1,9 +1,9 @@
 ---
 name: hot-skillet-define
-description: Initialize a Hot Skillet project - parse story, create context, setup git branch
+description: Initialize a Hot Skillet project - parse work item, create context, setup git branch
 arguments:
   - name: story
-    description: Story source - Jira ID (e.g., PROJ-123), file path (story.md), URL, or direct story text
+    description: Work item source - Jira ID (e.g., PROJ-123), file path (story.md), URL, or direct text describing the work
     required: true
 ---
 
@@ -13,9 +13,11 @@ arguments:
 
 You are initializing a Hot Skillet project. Your job is to set up the project context for a semi-autonomous development workflow.
 
+**Note**: "Story" is used loosely here - the work item might be a feature, bug fix, refactor, or any development task.
+
 ## Inputs
 
-**Story Source**: `$ARGUMENTS.story`
+**Work Item Source**: `$ARGUMENTS.story`
 **Project Directory**: Current working directory
 
 ## Project Files
@@ -85,7 +87,24 @@ Use the provided text as-is
 - For Jira: Use ticket ID directly (e.g., `PROJ-123`)
 - For file: Use filename slug (e.g., `feature-auth`)
 - For URL: Extract meaningful path segment
-- For text: Use first 3 words slugified + timestamp
+- For direct text: Generate a unique slug (see below)
+
+**Generating ID for direct text**:
+
+1. **Create base slug** from the text:
+   - Extract key words (skip common words like "add", "fix", "the", "a", "an")
+   - Use 2-4 meaningful words, lowercased, joined with hyphens
+   - Example: "Fix the login button not working" → `login-button`
+   - Example: "Add user authentication with OAuth" → `user-auth-oauth`
+
+2. **Ensure uniqueness**:
+   - Check if `.hot-skillet/` directory exists
+   - List existing project directories: `ls .hot-skillet/`
+   - If the slug already exists, append a number: `login-button-2`, `login-button-3`
+
+3. **Fallback**:
+   - If slug generation fails, use `work-{timestamp}` format
+   - Example: `work-20260202-1430`
 
 ### Step 4: Create Project Structure
 
@@ -120,14 +139,14 @@ Create the `.hot-skillet/{story-id}/` directory and initialize files:
 }
 ```
 
-### Step 5: Save Story Content
+### Step 5: Save Work Item Content
 
-Write the fetched story content to `research.md` as a starting point:
+Write the fetched content to `research.md` as a starting point:
 
 ```markdown
-# Story
+# Work Item
 
-{story content from Jira/file/URL/text}
+{content from Jira/file/URL/text}
 
 ---
 
@@ -160,12 +179,12 @@ Update context.json with:
 ```markdown
 ## 🍳 Hot Skillet Project Initialized
 
-**Story ID**: {story-id}
-**Story Source**: {type} - {value}
+**ID**: {story-id}
+**Source**: {type} - {value}
 **Project Path**: .hot-skillet/{story-id}/
 
-### Story Summary
-{First 200 chars of story content or full if shorter}
+### Summary
+{First 200 chars of content or full if shorter}
 
 ### Git Status
 - Current branch: {branch}
@@ -176,7 +195,7 @@ Update context.json with:
 - `context.json` - Project metadata
 - `questions.json` - For tracking questions/answers
 - `learnings.json` - For capturing insights
-- `research.md` - Story content (research to be added)
+- `research.md` - Work item content (research to be added)
 
 ### Next Step
 Run `/hot-skillet-research` to analyze the codebase and generate implementation questions.
